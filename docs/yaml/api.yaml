@@ -1,0 +1,76 @@
+openapi: 3.0.0 # Версия спецификации OpenAPI
+info:
+  title: Название вашего API
+  description: Описание вашего API
+  version: 1.0.0 # Версия API
+servers:
+  - url: http://localhost:5000 # Базовый URL для вашего API
+    description: Локальный сервер разработки
+paths:
+  /users:
+    get:
+      summary: Получить список пользователей
+      description: Возвращает список всех зарегистрированных пользователей
+      responses:
+        '200':
+          description: Успешный ответ
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+    post:
+      summary: Создать нового пользователя
+      description: Добавляет нового пользователя в систему
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewUser'
+      responses:
+        '201':
+          description: Пользователь успешно создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  /users/{id}:
+    get:
+      summary: Получить информацию о пользователе
+      description: Возвращает данные о конкретном пользователе по его ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID пользователя
+      responses:
+        '200':
+          description: Успешный ответ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: Пользователь не найден
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+    NewUser:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string

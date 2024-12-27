@@ -1,0 +1,103 @@
+openapi: 3.1.0
+
+info:
+    title: Learning Platform Authentication
+    description: HTTP endpoints for authentication
+    version: '1.0'
+
+paths:
+    /user/register:
+        post:
+            description: Регистрация пользователя
+            parameters:
+              - $ref: '#/components/parameters/OrganizationID'
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/UserRegisterRequest'
+            responses:
+                201:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/UserRegisterResponse201'
+                400:
+                    description: Некорректные параметры запроса
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/UserRegisterResponse400'                        
+
+components:
+    parameters:
+        OrganizationID:
+            in: query
+            name: organization_id
+            description: ID организации
+            required: true
+            schema:
+                type: string
+                minLength: 1
+
+    schemas:
+        FullName:
+            type: object
+            required:
+              - first_name
+              - second_name
+            properties:
+                first_name:
+                    description: Имя
+                    type: string
+                    minLength: 1
+                second_name:
+                    description: Фамилия
+                    type: string
+                    minLength: 1
+                middle_name:
+                    description: Отчество
+                    type: string
+                    minLength: 1
+
+        UserRegisterRequest:
+            type: object
+            required:
+              - email
+              - password
+              - full_name
+            properties:            
+                email:
+                    type: string
+                    minLength: 1
+                password:
+                    type: string
+                    minLength: 8
+                full_name:
+                    $ref: '#/components/schemas/FullName'
+        
+        UserRegisterResponse201:
+            type: object
+            required:
+              - token
+            properties:
+                token:
+                    type: string
+                    minLength: 1
+
+        UserRegisterResponse400:
+            type: object
+            required:
+              - code
+            properties:
+                code:
+                    type: string
+                    enum:
+                      - user_already_exists
+                      - invalid_email
+                      - invalid_password
+                      - invalid_first_name
+                      - invalid_second_name
+                      - invalid_middle_name
