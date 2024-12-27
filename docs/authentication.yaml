@@ -29,7 +29,34 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/UserRegisterResponse400'                        
+                                $ref: '#/components/schemas/UserRegisterResponse400'
+
+    /user/authorize:
+        post:
+            description: Авторизация пользователя
+            parameters:
+              - $ref: '#/components/parameters/OrganizationID'
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/UserAuthorizeRequest'
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/UserAuthorizeResponse200'
+                400:
+                    description: Некорректные параметры запроса
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/UserAuthorizeResponse400' 
+                404:
+                    description: Пользователь не найден                         
 
 components:
     parameters:
@@ -61,6 +88,15 @@ components:
                     description: Отчество
                     type: string
                     minLength: 1
+        
+        Token:
+            type: object
+            required:
+              - token
+            properties:
+                token:
+                    type: string
+                    minLength: 1
 
         UserRegisterRequest:
             type: object
@@ -79,13 +115,7 @@ components:
                     $ref: '#/components/schemas/FullName'
         
         UserRegisterResponse201:
-            type: object
-            required:
-              - token
-            properties:
-                token:
-                    type: string
-                    minLength: 1
+            $ref: '#/components/schemas/Token'
 
         UserRegisterResponse400:
             type: object
@@ -101,3 +131,32 @@ components:
                       - invalid_first_name
                       - invalid_second_name
                       - invalid_middle_name
+
+        UserAuthorizeRequest:
+            type: object
+            required:
+              - email
+              - password
+            properties:            
+                email:
+                    type: string
+                    minLength: 1
+                password:
+                    type: string
+                    minLength: 8
+        
+        UserAuthorizeResponse200:
+            $ref: '#/components/schemas/Token'
+
+        UserAuthorizeResponse400:
+            type: object
+            required:
+              - code
+            properties:
+                code:
+                    type: string
+                    enum:
+                      - invalid_email
+                      - invalid_password
+                      - wrong_password
+        
