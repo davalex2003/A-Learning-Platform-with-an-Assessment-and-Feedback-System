@@ -1,0 +1,87 @@
+openapi: 3.1.0
+
+info:
+    title: Learning Platform Admin
+    description: HTTP endpoints for admins
+    version: '1.0'
+
+paths:
+    /admin/user/list:
+        get:
+            description: Получение списка пользователей для администратора
+            parameters:
+              - $ref: '#/components/parameters/OrganizationID'
+              - $ref: '#/components/parameters/Token'
+            responses:
+                200:
+                    description: OK
+                400:
+                    description: Некорректные параметры запроса
+                404:
+                    description: Организация не найдена
+
+components:
+    parameters:
+        OrganizationID:
+            in: query
+            name: organization_id
+            description: ID организации
+            required: true
+            schema:
+                type: string
+                minLength: 1
+
+        Token:
+            in: query
+            type: object
+            name: token
+            required: true
+            schema:
+                type: string
+                minLength: 1
+
+    schemas:
+        FullName:
+            type: object
+            required:
+              - first_name
+              - second_name
+            properties:
+                first_name:
+                    description: Имя
+                    type: string
+                    minLength: 1
+                second_name:
+                    description: Фамилия
+                    type: string
+                    minLength: 1
+                middle_name:
+                    description: Отчество
+                    type: string
+                    minLength: 1
+        
+        UserRole:
+            type: string
+            enum:
+              - student
+              - teacher
+              - admin
+
+        User:
+            type: object
+            properties:
+                full_name:
+                    $ref: '#/components/schemas/FullName'
+                email:
+                    type: string
+                    minLength: 1
+                role:
+                    $ref: '#/components/schemas/UserRole'
+
+
+        AdminUserListResponse200:
+            type: array
+            items:
+                $ref: '#/components/schemas/User'
+            minItems: 1
+
