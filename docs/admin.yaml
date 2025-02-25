@@ -19,14 +19,30 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/AdminUserListResponse200'
-                400:
-                    description: Некорректные параметры запроса
+                401:
+                    description: Unauthorized
                 404:
                     description: Организация не найдена
     
     /admin/user/role:
         put:
             description: Изменение роли пользователя
+            parameters:
+              - $ref: '#/components/parameters/OrganizationID'
+              - $ref: '#/components/parameters/Token'
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/PutUserRoleRequest'
+            responses:
+                200:
+                    description: OK
+                401:
+                    description: Unauthorized
+                404:
+                    description: Организация или пользователь не найдены
 
 components:
     parameters:
@@ -36,8 +52,7 @@ components:
             description: ID организации
             required: true
             schema:
-                type: string
-                minLength: 1
+                $ref: '#/components/schemas/NotEmptyString'
 
         Token:
             in: query
@@ -45,10 +60,13 @@ components:
             name: token
             required: true
             schema:
-                type: string
-                minLength: 1
+                $ref: '#/components/schemas/NotEmptyString'
 
     schemas:
+        NotEmptyString:
+            type: string
+            minLength: 1
+
         FullName:
             type: object
             required:
@@ -57,16 +75,13 @@ components:
             properties:
                 first_name:
                     description: Имя
-                    type: string
-                    minLength: 1
+                    $ref: '#/components/schemas/NotEmptyString'
                 second_name:
                     description: Фамилия
-                    type: string
-                    minLength: 1
+                    $ref: '#/components/schemas/NotEmptyString'
                 middle_name:
                     description: Отчество
-                    type: string
-                    minLength: 1
+                    $ref: '#/components/schemas/NotEmptyString'
         
         UserRole:
             type: string
@@ -78,15 +93,17 @@ components:
         User:
             type: object
             required:
+              - id
               - full_name
               - email
               - role
             properties:
+                id:
+                    $ref: '#/components/schemas/NotEmptyString'
                 full_name:
                     $ref: '#/components/schemas/FullName'
                 email:
-                    type: string
-                    minLength: 1
+                    $ref: '#/components/schemas/NotEmptyString'
                 role:
                     $ref: '#/components/schemas/UserRole'
 
@@ -95,18 +112,14 @@ components:
             items:
                 $ref: '#/components/schemas/User'
             minItems: 1
-
-        AdminUserListResponse400:
+        
+        PutUserRoleRequest:
             type: object
             required:
-              - code
+              - id
+              - role
             properties:
-                code:
-                    type: string
-                    enum:
-                      - user_already_exists
-                      - invalid_email
-                      - invalid_password
-                      - invalid_first_name
-                      - invalid_second_name
-                      - invalid_middle_name
+                id:
+                    $ref: '#/components/schemas/NotEmptyString'
+                role:
+                    $ref: '#/components/schemas/UserRole'
