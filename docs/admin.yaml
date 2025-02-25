@@ -15,10 +15,18 @@ paths:
             responses:
                 200:
                     description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/AdminUserListResponse200'
                 400:
                     description: Некорректные параметры запроса
                 404:
                     description: Организация не найдена
+    
+    /admin/user/role:
+        put:
+            description: Изменение роли пользователя
 
 components:
     parameters:
@@ -69,6 +77,10 @@ components:
 
         User:
             type: object
+            required:
+              - full_name
+              - email
+              - role
             properties:
                 full_name:
                     $ref: '#/components/schemas/FullName'
@@ -78,10 +90,23 @@ components:
                 role:
                     $ref: '#/components/schemas/UserRole'
 
-
         AdminUserListResponse200:
             type: array
             items:
                 $ref: '#/components/schemas/User'
             minItems: 1
 
+        AdminUserListResponse400:
+            type: object
+            required:
+              - code
+            properties:
+                code:
+                    type: string
+                    enum:
+                      - user_already_exists
+                      - invalid_email
+                      - invalid_password
+                      - invalid_first_name
+                      - invalid_second_name
+                      - invalid_middle_name
