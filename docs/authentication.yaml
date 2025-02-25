@@ -100,19 +100,27 @@ components:
             description: ID организации
             required: true
             schema:
-                type: string
-                minLength: 1
-
+                $ref: '#/components/schemas/NotEmptyString'
         Email:
             in: query
             name: email
             description: Электронная почта
             required: true
             schema:
-                type: string
-                minLength: 1     
+                $ref: '#/components/schemas/NotEmptyString'  
 
     schemas:
+        NotEmptyString:
+            type: string
+            minLength: 1
+
+        UserRole:
+            type: string
+            enum:
+              - student
+              - teacher
+              - admin
+
         FullName:
             type: object
             required:
@@ -121,16 +129,13 @@ components:
             properties:
                 first_name:
                     description: Имя
-                    type: string
-                    minLength: 1
+                    $ref: '#/components/schemas/NotEmptyString'
                 second_name:
                     description: Фамилия
-                    type: string
-                    minLength: 1
+                    $ref: '#/components/schemas/NotEmptyString'
                 middle_name:
                     description: Отчество
-                    type: string
-                    minLength: 1
+                    $ref: '#/components/schemas/NotEmptyString'
         
         Token:
             type: object
@@ -138,8 +143,7 @@ components:
               - token
             properties:
                 token:
-                    type: string
-                    minLength: 1
+                    $ref: '#/components/schemas/NotEmptyString'
 
         UserRegisterRequest:
             type: object
@@ -149,8 +153,7 @@ components:
               - full_name
             properties:            
                 email:
-                    type: string
-                    minLength: 1
+                    $ref: '#/components/schemas/NotEmptyString'
                 password:
                     type: string
                     minLength: 8
@@ -158,7 +161,21 @@ components:
                     $ref: '#/components/schemas/FullName'
         
         UserRegisterResponse201:
-            $ref: '#/components/schemas/Token'
+            type: object
+            required:
+              - token
+              - role
+              - full_name
+              - email
+            properties:
+                token:
+                    $ref: '#/components/schemas/Token'
+                role:
+                    $ref: '#/components/schemas/UserRole'
+                full_name:
+                    $ref: '#/components/schemas/FullName'
+                email:
+                    $ref: '#/components/schemas/NotEmptyString'
 
         UserRegisterResponse400:
             type: object
@@ -182,14 +199,27 @@ components:
               - password
             properties:            
                 email:
-                    type: string
-                    minLength: 1
+                    $ref: '#/components/schemas/NotEmptyString'
                 password:
                     type: string
                     minLength: 8
         
         UserAuthorizeResponse200:
-            $ref: '#/components/schemas/Token'
+            type: object
+            required:
+              - token
+              - role
+              - full_name
+              - email
+            properties:
+                token:
+                    $ref: '#/components/schemas/Token'
+                role:
+                    $ref: '#/components/schemas/UserRole'
+                full_name:
+                    $ref: '#/components/schemas/FullName'
+                email:
+                    $ref: '#/components/schemas/NotEmptyString'
 
         UserAuthorizeResponse400:
             type: object
