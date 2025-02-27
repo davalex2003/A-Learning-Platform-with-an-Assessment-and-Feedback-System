@@ -1,0 +1,70 @@
+openapi: 3.1.0
+
+info:
+    title: Learning Platform External Api
+    description: HTTP endpoints for external api
+    version: '1.0'
+
+paths:
+    /api/admin/create:
+        post:
+            description: Создание админа
+            parameters:
+              - $ref: '#/components/parameters/OrganizationID'
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/AdminCreateRequest'
+            responses:
+                200:
+                    description: OK
+                404:
+                    description: Организация не найдена
+
+components:
+    parameters:
+        OrganizationID:
+            in: query
+            name: organization_id
+            description: ID организации
+            required: true
+            schema:
+                $ref: '#/components/schemas/NotEmptyString'
+
+    schemas:
+        NotEmptyString:
+            type: string
+            minLength: 1
+
+        FullName:
+            type: object
+            required:
+              - first_name
+              - second_name
+            properties:
+                first_name:
+                    description: Имя
+                    $ref: '#/components/schemas/NotEmptyString'
+                second_name:
+                    description: Фамилия
+                    $ref: '#/components/schemas/NotEmptyString'
+                middle_name:
+                    description: Отчество
+                    $ref: '#/components/schemas/NotEmptyString'
+
+        AdminCreateRequest:
+            type: object
+            required:
+              - email
+              - password
+              - full_name
+            properties:            
+                email:
+                    $ref: '#/components/schemas/NotEmptyString'
+                password:
+                    type: string
+                    minLength: 8
+                full_name:
+                    $ref: '#/components/schemas/FullName'
