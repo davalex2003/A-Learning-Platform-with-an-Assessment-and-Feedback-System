@@ -43,6 +43,58 @@ paths:
                     description: Unauthorized
                 404:
                     description: Организация или пользователь не найдены
+    
+    /admin/course/list:
+        get:
+            description: Получение списка курсов
+            parameters:
+              - $ref: '#/components/parameters/OrganizationID'
+              - $ref: '#/components/parameters/Token'
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CourseListResponse200'
+                401:
+                    description: Unauthorized
+                404:
+                    description: Организация не найдена
+
+    /admin/course:
+        put:
+            description: Редактирование курса
+            parameters:
+              - $ref: '#/components/parameters/OrganizationID'
+              - $ref: '#/components/parameters/Token'
+              - $ref: '#/components/parameters/CourseID'
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CourseModel'
+            responses:
+                200:
+                    description: OK
+                401:
+                    description: Unauthorized
+                404:
+                    description: Организация не найдена
+        delete:
+            description: Удаление курса
+            parameters:
+              - $ref: '#/components/parameters/OrganizationID'
+              - $ref: '#/components/parameters/Token'
+              - $ref: '#/components/parameters/CourseID'
+            responses:
+                200:
+                    description: OK
+                401:
+                    description: Unauthorized
+                404:
+                    description: Организация не найдена
 
 components:
     parameters:
@@ -58,6 +110,14 @@ components:
             in: query
             type: object
             name: token
+            required: true
+            schema:
+                $ref: '#/components/schemas/NotEmptyString'
+
+        CourseID:
+            in: query
+            type: object
+            name: course_id
             required: true
             schema:
                 $ref: '#/components/schemas/NotEmptyString'
@@ -107,6 +167,20 @@ components:
                 role:
                     $ref: '#/components/schemas/UserRole'
 
+        Course:
+            type: object
+            required:
+              - id
+              - name
+              - description
+            properties:
+                id:
+                    $ref: '#/components/schemas/NotEmptyString'
+                name:
+                    $ref: '#/components/schemas/NotEmptyString'
+                description:
+                    $ref: '#/components/schemas/NotEmptyString'
+
         AdminUserListResponse200:
             type: array
             items:
@@ -123,3 +197,8 @@ components:
                     $ref: '#/components/schemas/NotEmptyString'
                 role:
                     $ref: '#/components/schemas/UserRole'
+        
+        CourseListResponse200:
+            type: array
+            items:
+                $ref: '#/components/schemas/Course'

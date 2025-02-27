@@ -61,6 +61,24 @@ paths:
                     description: Unauthorized
                 404:
                     description: Организация не найдена
+    
+    /course/teacher/list:
+        get:
+            description: Получение списка курсов
+            parameters:
+              - $ref: '#/components/parameters/OrganizationID'
+              - $ref: '#/components/parameters/Token'
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CourseListResponse200'
+                401:
+                    description: Unauthorized
+                404:
+                    description: Организация не найдена
 
 components:
     parameters:
@@ -104,6 +122,20 @@ components:
                 description:
                     $ref: '#/components/schemas/NotEmptyString'
         
+        Course:
+            type: object
+            required:
+              - id
+              - name
+              - description
+            properties:
+                id:
+                    $ref: '#/components/schemas/NotEmptyString'
+                name:
+                    $ref: '#/components/schemas/NotEmptyString'
+                description:
+                    $ref: '#/components/schemas/NotEmptyString'
+        
         CourseCreateResponse201:
             type: object
             required:
@@ -111,3 +143,8 @@ components:
             properties:
                 course_id:
                     $ref: '#/components/schemas/NotEmptyString'
+        
+        CourseListResponse200:
+            type: array
+            items:
+                $ref: '#/components/schemas/Course'
