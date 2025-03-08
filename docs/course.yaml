@@ -80,6 +80,60 @@ paths:
                 404:
                     description: Организация не найдена
 
+    /course/teacher/additions:
+        get:
+            description: Получение списка материалов и ссылок
+            parameters:
+              - $ref: '#/components/parameters/OrganizationID'
+              - $ref: '#/components/parameters/Token'
+              - $ref: '#/components/parameters/CourseID'
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CourseAdditionsResponse200'
+                401:
+                    description: Unauthorized
+                404:
+                    description: Организация не найдена
+        delete:
+            description: Удаление материала или ссылки
+            parameters:
+              - $ref: '#/components/parameters/OrganizationID'
+              - $ref: '#/components/parameters/Token'
+              - $ref: '#/components/parameters/CourseID'
+              - $ref: '#/components/parameters/AdditionID'
+            responses:
+                200:
+                    description: OK
+                401:
+                    description: Unauthorized
+                404:
+                    description: Организация не найдена
+
+    /course/teacher/additions/link:
+        post:
+            description: Добавление ссылки в материалы курса
+            parameters:
+              - $ref: '#/components/parameters/OrganizationID'
+              - $ref: '#/components/parameters/Token'
+              - $ref: '#/components/parameters/CourseID'
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CourseAdditionsLinkRequest'
+            responses:
+                201:
+                    description: OK
+                401:
+                    description: Unauthorized
+                404:
+                    description: Организация не найдена
+
 components:
     parameters:
         OrganizationID:
@@ -102,6 +156,14 @@ components:
             in: query
             type: object
             name: course_id
+            required: true
+            schema:
+                $ref: '#/components/schemas/NotEmptyString'
+
+        AdditionID:
+            in: query
+            type: object
+            name: addition_id
             required: true
             schema:
                 $ref: '#/components/schemas/NotEmptyString'
@@ -135,6 +197,17 @@ components:
                     $ref: '#/components/schemas/NotEmptyString'
                 description:
                     $ref: '#/components/schemas/NotEmptyString'
+
+        Addition:
+            type: object
+            required:
+              - id
+              - name
+            properties:
+                id:
+                    $ref: '#/components/schemas/NotEmptyString'
+                name:
+                    $ref: '#/components/schemas/NotEmptyString'
         
         CourseCreateResponse201:
             type: object
@@ -148,3 +221,26 @@ components:
             type: array
             items:
                 $ref: '#/components/schemas/Course'
+        
+        CourseAdditionsResponse200:
+            type: object
+            required:
+              - materials
+              - links
+            properties:
+                materials:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Addition'
+                links:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Addition'
+
+        CourseAdditionsLinkRequest:
+            type: object
+            required:
+              - link
+            properties:
+                link:
+                    $ref: '#/components/schemas/NotEmptyString'
