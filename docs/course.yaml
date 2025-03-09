@@ -80,7 +80,7 @@ paths:
                 404:
                     description: Организация не найдена
 
-    /course/teacher/additions:
+    /course/additions:
         get:
             description: Получение списка материалов и ссылок
             parameters:
@@ -94,8 +94,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/CourseAdditionsResponse200'
-                401:
-                    description: Unauthorized
                 404:
                     description: Организация не найдена
         delete:
@@ -115,7 +113,7 @@ paths:
 
     /course/teacher/additions/link:
         post:
-            description: Добавление ссылки в материалы курса
+            description: Добавление ссылки в дополнения курса
             parameters:
               - $ref: '#/components/parameters/OrganizationID'
               - $ref: '#/components/parameters/Token'
@@ -133,6 +131,58 @@ paths:
                     description: Unauthorized
                 404:
                     description: Организация не найдена
+    
+    /course/additions/material:
+        get:
+            description: Скачивание материала курса
+            parameters:
+              - $ref: '#/components/parameters/OrganizationID'
+              - $ref: '#/components/parameters/Token'
+              - $ref: '#/components/parameters/CourseID'
+              - $ref: '#/components/parameters/AdditionID'
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/octet-stream:
+                            schema:
+                                type: string
+                                format: binary
+                404:
+                    description: Организация не найдена
+        post:
+            description: Добавление материала курса
+            parameters:
+              - $ref: '#/components/parameters/OrganizationID'
+              - $ref: '#/components/parameters/Token'
+              - $ref: '#/components/parameters/CourseID'
+            requestBody:
+                required: true
+                content:
+                    multipart/form-data:
+                        schema:
+                            type: object
+                            required:
+                                - file
+                            properties:
+                                file:
+                                    type: string
+                                    format: binary
+
+    /course/student/add:
+        post:
+            description: Запись студента на курс
+            parameters:
+              - $ref: '#/components/parameters/OrganizationID'
+              - $ref: '#/components/parameters/Token'
+              - $ref: '#/components/parameters/CourseID'
+            responses:
+                200:
+                    description: OK
+                401:
+                    description: Unauthorized
+                404:
+                    description: Организация или курс не найдены
 
 components:
     parameters:
