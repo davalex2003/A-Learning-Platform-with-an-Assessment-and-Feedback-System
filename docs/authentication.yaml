@@ -165,18 +165,9 @@ components:
             type: object
             required:
               - token
-              - role
-              - full_name
-              - email
             properties:
                 token:
                     $ref: '#/components/schemas/Token'
-                role:
-                    $ref: '#/components/schemas/UserRole'
-                full_name:
-                    $ref: '#/components/schemas/FullName'
-                email:
-                    $ref: '#/components/schemas/NotEmptyString'
 
         UserRegisterResponse400:
             type: object
