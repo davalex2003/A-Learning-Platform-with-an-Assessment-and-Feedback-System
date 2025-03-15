@@ -62,7 +62,7 @@ paths:
                 404:
                     description: Организация не найдена
     
-    /course/list:
+    /course/teacher/list:
         get:
             description: Получение списка курсов
             parameters:
