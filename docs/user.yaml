@@ -1,8 +1,8 @@
 openapi: 3.1.0
 
 info:
-    title: Learning Platform Authentication
-    description: HTTP endpoints for authentication
+    title: Learning Platform User
+    description: HTTP endpoints for User
     version: '1.0'
 
 paths:
@@ -92,6 +92,22 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/UserEmailSendVerificationCodeResponse400'
 
+    /user/info:
+        get:
+            description: Получить информацию о пользователе
+            parameters:
+              - $ref: '#/components/parameters/Token'
+              - $ref: '#/components/parameters/OrganizationID'
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/UserInfoResponse200'
+                404:
+                    description: Пользователь не найден  
+
 components:
     parameters:
         OrganizationID:
@@ -108,7 +124,15 @@ components:
             description: Электронная почта
             required: true
             schema:
-                $ref: '#/components/schemas/NotEmptyString'  
+                $ref: '#/components/schemas/NotEmptyString'
+
+        Token:
+            in: query
+            type: object
+            name: token
+            required: true
+            schema:
+                $ref: '#/components/schemas/NotEmptyString'
 
     schemas:
         NotEmptyString:
@@ -260,3 +284,17 @@ components:
                       - user_already_has_verified_email
                       - invalid_token
                       - invalid_code
+
+        UserInfoResponse200:
+            type: object
+            required:
+              - role
+              - full_name
+              - email
+            properties:
+                role:
+                    $ref: '#/components/schemas/UserRole'
+                full_name:
+                    $ref: '#/components/schemas/FullName'
+                email:
+                    $ref: '#/components/schemas/NotEmptyString'
