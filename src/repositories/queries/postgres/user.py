@@ -1,0 +1,1 @@
+SELECT_BY_EMAIL = 'SELECT * FROM "user" WHERE email = %s'
