@@ -225,3 +225,14 @@ components:
             type: array
             items:
                 $ref: '#/components/schemas/Course'
+
+        CourseModel:
+            type: object
+            required:
+              - name
+              - description
+            properties:
+                name:
+                    $ref: '#/components/schemas/NotEmptyString'
+                description:
+                    $ref: '#/components/schemas/NotEmptyString'
