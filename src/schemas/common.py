@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 class Response400(BaseModel):
-    code: str
+    code: str = Field(min_length=1)

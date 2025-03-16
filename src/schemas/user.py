@@ -1,15 +1,15 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional
 
 class FullName(BaseModel):
-    first_name: str
-    second_name: str
-    middle_name: str
+    first_name: str = Field(min_length=1)
+    second_name: str = Field(min_length=1)
+    middle_name: Optional[str] = Field(None, min_length=1)
 
 class UserRegisterRequest(BaseModel):
-    email: str
-    password: str
+    email: str = Field(min_length=1)
+    password: str = Field(min_length=8)
     full_name: FullName
 
 class UserRegisterResponse201(BaseModel):
-    token: str
+    token: str = Field(min_length=1)

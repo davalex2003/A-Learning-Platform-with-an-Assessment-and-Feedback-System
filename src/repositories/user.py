@@ -3,6 +3,8 @@ import logging
 import psycopg2
 
 import repositories.queries.postgres.user as user_queries
+from schemas.user import UserRegisterRequest
+from utils.hash import get_hash_string
 
 class UserRepository:
 
@@ -19,13 +21,12 @@ class UserRepository:
             return
         return conn
 
-    # def create_user(self, user: User):
-    #     conn = self.connect()
-    #     with conn.cursor() as cursor:
-    #         cursor.execute('INSERT INTO "user" (name, surname, e_mail, hash_password) '
-    #                        'VALUES (%s, %s, %s, %s)', (user.name, user.surname, user.e_mail, user.hash_password))
-    #     conn.commit()
-    #     conn.close()
+    def create_student(self, user: UserRegisterRequest):
+        conn = self.connect()
+        with conn.cursor() as cursor:
+            cursor.execute(user_queries.CREATE_STUDENT, (user.email, get_hash_string(user.password), 'student', user.full_name.first_name, user.full_name.second_name, user.full_name.middle_name))
+        conn.commit()
+        conn.close()
 
     # def validate_user(self, user: UserValidate) -> bool:
     #     conn = self.connect()
