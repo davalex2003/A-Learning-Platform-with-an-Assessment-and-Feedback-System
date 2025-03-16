@@ -15,6 +15,7 @@ CREATE TABLE "course" (
   "description" varchar NOT NULL,
   "links" jsonb,
   "materials" jsonb,
+  "is_active" bool NOT NULL DEFAULT true,
   "user_id" int NOT NULL
 );
 
