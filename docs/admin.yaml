@@ -43,6 +43,21 @@ paths:
                     description: Unauthorized
                 404:
                     description: Организация или пользователь не найдены
+
+    /admin/user:
+        delete:
+            description: Удаление пользователя
+            parameters:
+              - $ref: '#/components/parameters/OrganizationID'
+              - $ref: '#/components/parameters/Token'
+              - $ref: '#/components/parameters/UserID'
+            responses:
+                200:
+                    description: OK
+                401:
+                    description: Unauthorized
+                404:
+                    description: Организация или пользователь не найдены
     
     /admin/course/list:
         get:
@@ -118,6 +133,14 @@ components:
             in: query
             type: object
             name: course_id
+            required: true
+            schema:
+                $ref: '#/components/schemas/NotEmptyString'
+
+        UserID:
+            in: query
+            type: object
+            name: user_id
             required: true
             schema:
                 $ref: '#/components/schemas/NotEmptyString'
