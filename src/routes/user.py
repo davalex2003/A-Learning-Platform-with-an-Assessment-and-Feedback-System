@@ -30,3 +30,10 @@ async def authorize_user(organization_id: str, request: UserAuthorizeRequest):
 async def get_user_info(organization_id: str, token: str):
     service = UserService()
     return service.get_user_info(token) or JSONResponse(content=None, status_code=404)
+
+@router.post('/email/send_verification_code')
+async def send_verification_code(organization_id: str, token: str):
+    service = UserService()
+    if service.send_verification_code(token):
+        return JSONResponse(content=None, status_code=200)
+    return Response400(code='invalid_email')

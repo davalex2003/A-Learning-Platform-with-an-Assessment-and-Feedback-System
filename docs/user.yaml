@@ -64,7 +64,7 @@ paths:
         post:
             description: Отправить код на email
             parameters:
-              - $ref: '#/components/parameters/Email'
+              - $ref: '#/components/parameters/Token'
             responses:
                 200:
                     description: OK
@@ -116,14 +116,6 @@ components:
             in: query
             name: organization_id
             description: ID организации
-            required: true
-            schema:
-                $ref: '#/components/schemas/NotEmptyString'
-
-        Email:
-            in: query
-            name: email
-            description: Электронная почта
             required: true
             schema:
                 $ref: '#/components/schemas/NotEmptyString'
@@ -267,7 +259,6 @@ components:
             required:
               - token
               - code
-              - email
             properties:
                 token:
                     $ref: '#/components/schemas/Token'
@@ -275,8 +266,6 @@ components:
                     type: string
                     minLength: 6
                     maxLength: 6
-                email:
-                    $ref: '#/components/schemas/NotEmptyString'
 
         UserEmailVerifyResponse400:
             type: object
