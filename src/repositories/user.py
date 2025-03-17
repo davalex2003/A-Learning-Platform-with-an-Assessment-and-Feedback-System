@@ -3,7 +3,7 @@ import logging
 import psycopg2
 
 import repositories.queries.postgres.user as user_queries
-from schemas.user import UserRegisterRequest, UserAuthorizeRequest
+from schemas.user import UserRegisterRequest, UserAuthorizeRequest, UserInfoResponse200
 from utils.hash import get_hash_string
 
 class UserRepository:
@@ -30,6 +30,7 @@ class UserRepository:
 
     def check_by_email_and_password(self, user: UserAuthorizeRequest) -> bool:
         conn = self.connect()
+        print(get_hash_string(user.password))
         with conn.cursor() as cursor:
             cursor.execute(user_queries.GET_USER, (user.email, get_hash_string(user.password)))
             data = cursor.fetchall()
@@ -50,26 +51,10 @@ class UserRepository:
         else:
             return False
 
-    # def delete_user(self, e_mail: str):
-    #     conn = self.connect()
-    #     with conn.cursor() as cursor:
-    #         cursor.execute('DELETE FROM "user" WHERE e_mail = %s', (e_mail,))
-    #     conn.commit()
-    #     conn.close()
-
-    # def update_user(self, user: UserUpdate, e_mail: str):
-    #     conn = self.connect()
-    #     with conn.cursor() as cursor:
-    #         cursor.execute('UPDATE "user" SET name = %s, surname = %s WHERE e_mail = %s',
-    #                        (user.name, user.surname, e_mail))
-    #     conn.commit()
-    #     conn.close()
-
-    # def get_user_name_and_surname(self, e_mail, hash_password):
-    #     conn = self.connect()
-    #     with conn.cursor() as cursor:
-    #         cursor.execute('SELECT name, surname FROM "user" WHERE e_mail = %s AND hash_password = %s',
-    #                        (e_mail, hash_password))
-    #         data = cursor.fetchone()
-    #     conn.close()
-    #     return data
+    def get_user_info(self, email: str, hash_password: str) -> UserInfoResponse200:
+        conn = self.connect()
+        with conn.cursor() as cursor:
+            cursor.execute(user_queries.GET_USER, (email, hash_password))
+            data = cursor.fetchall()
+        conn.close()
+        return data

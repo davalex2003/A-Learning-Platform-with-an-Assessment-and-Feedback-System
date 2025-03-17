@@ -18,5 +18,10 @@ class UserAuthorizeRequest(BaseModel):
     email: str = Field(min_length=1)
     password: str = Field(min_length=8)
 
-class UserAuthorizeResponse200:
+class UserAuthorizeResponse200(BaseModel):
     token: str = Field(min_length=1)
+
+class UserInfoResponse200(BaseModel):
+    role: str = Field(min_length=1)
+    full_name: FullName
+    email: str = Field(min_length=1)

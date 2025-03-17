@@ -24,4 +24,9 @@ async def authorize_user(organization_id: str, request: UserAuthorizeRequest):
     token = service.check_user_exits(request)
     if not token:
         return Response400(code='wrong_password')
-    return UserRegisterResponse201(token=token)
+    return UserAuthorizeResponse200(token=token)
+
+@router.get('/info')
+async def get_user_info(organization_id: str, token: str):
+    service = UserService()
+    return service.get_user_info(token) or JSONResponse(content=None, status_code=404)
