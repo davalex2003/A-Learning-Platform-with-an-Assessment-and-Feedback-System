@@ -43,7 +43,6 @@ class UserRepository:
 
     def check_by_email_and_password(self, user: UserAuthorizeRequest) -> bool:
         conn = self.connect_postgres()
-        print(get_hash_string(user.password))
         with conn.cursor() as cursor:
             cursor.execute(user_queries.GET_USER, (user.email, get_hash_string(user.password)))
             data = cursor.fetchall()

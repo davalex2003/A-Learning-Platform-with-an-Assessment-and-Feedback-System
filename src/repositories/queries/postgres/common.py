@@ -1,0 +1,1 @@
+GET_USER_ROLE = 'SELECT role FROM "user" WHERE email = %s'

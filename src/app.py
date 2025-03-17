@@ -2,6 +2,7 @@ from fastapi import FastAPI, UploadFile, File, Request, WebSocket
 from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import JSONResponse, FileResponse
 
+from routes.admin import router as admin_router
 from routes.user import router as user_router
 
 app = FastAPI()
@@ -14,6 +15,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(admin_router)
 app.include_router(user_router)
 
 @app.get("/ping")

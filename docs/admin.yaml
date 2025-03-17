@@ -12,6 +12,7 @@ paths:
             parameters:
               - $ref: '#/components/parameters/OrganizationID'
               - $ref: '#/components/parameters/Token'
+              - $ref: '#/components/parameters/SearchQuery'
             responses:
                 200:
                     description: OK
@@ -144,6 +145,15 @@ components:
             required: true
             schema:
                 $ref: '#/components/schemas/NotEmptyString'
+
+        SearchQuery:
+            in: query
+            type: object
+            name: search_query
+            required: true
+            schema:
+                type: string
+                minLength: 3
 
     schemas:
         NotEmptyString:
