@@ -2,7 +2,7 @@ from random import randint
 from typing import Optional
 
 from repositories.user import UserRepository
-from schemas.user import UserRegisterRequest, UserAuthorizeRequest, UserInfoResponse200, FullName
+from schemas.user import UserRegisterRequest, UserAuthorizeRequest, UserInfoResponse200, FullName, UserEmailVerifyRequest
 from utils.email import send_verification_code
 from utils.hash import get_hash_string
 from utils.jwt import decode_data, encode_data
@@ -42,7 +42,16 @@ class UserService:
             return False
         try:
             self.repository.set_verification_code(token, code)
-        except Exception as e:
+        except Exception:
             return False
         return True
-        
+    
+    def verify_email(self, token, code) -> bool:
+        code_1 = self.repository.get_verification_code(token)
+        if code != code_1:
+            return False
+        return True
+    
+    def confirm_email(self, user: UserEmailVerifyRequest):
+        user_data = decode_data(user.token)
+        self.repository.confirm_email(user_data['email'])

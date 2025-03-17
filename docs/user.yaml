@@ -261,7 +261,7 @@ components:
               - code
             properties:
                 token:
-                    $ref: '#/components/schemas/Token'
+                    $ref: '#/components/schemas/NotEmptyString'
                 code:
                     type: string
                     minLength: 6

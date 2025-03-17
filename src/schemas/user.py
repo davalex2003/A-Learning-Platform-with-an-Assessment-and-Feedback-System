@@ -25,3 +25,7 @@ class UserInfoResponse200(BaseModel):
     role: str = Field(min_length=1)
     full_name: FullName
     email: str = Field(min_length=1)
+
+class UserEmailVerifyRequest(BaseModel):
+    token: str = Field(min_length=1)
+    code: str = Field(min_length=6, max_length=6)

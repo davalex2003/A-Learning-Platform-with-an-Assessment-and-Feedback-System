@@ -72,6 +72,18 @@ class UserRepository:
         conn.close()
         return data
 
-    def set_verification_code(self, token:str, code: str):
+    def set_verification_code(self, token: str, code: str):
         conn = self.connect_redis()
         conn.set(token, code)
+    
+    def get_verification_code(self, token: str):
+        conn = self.connect_redis()
+        value = conn.get(token)
+        return value.decode('utf-8')
+    
+    def confirm_email(self, email: str):
+        conn = self.connect_postgres()
+        with conn.cursor() as cursor:
+            cursor.execute(user_queries.SET_CONFIRMED_EMAIL, (email, ))
+        conn.commit()
+        conn.close()
