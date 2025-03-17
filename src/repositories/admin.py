@@ -42,3 +42,10 @@ class AdminRepository:
             cursor.execute(admin_queries.DELETE_USER, (user_id, ))
         conn.commit()
         conn.close()
+    
+    def update_role(self, user_id: str, role: str):
+        conn = self.connect_postgres()
+        with conn.cursor() as cursor:
+            cursor.execute(admin_queries.CHANGE_USER_ROLE, (role, user_id))
+        conn.commit()
+        conn.close()

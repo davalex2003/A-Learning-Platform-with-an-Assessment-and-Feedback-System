@@ -11,3 +11,7 @@ class User(BaseModel):
     full_name: FullName
     email: str = Field(min_length=1)
     role: str
+
+class PutUserRoleRequest(BaseModel):
+    id: str = Field(min_length=1)
+    role: str

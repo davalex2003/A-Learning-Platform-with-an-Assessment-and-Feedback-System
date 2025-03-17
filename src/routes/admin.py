@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from starlette.responses import JSONResponse
 from typing import Optional
 
-from schemas.admin import User
+from schemas.admin import User, PutUserRoleRequest
 from schemas.common import Response400
 from services.admin import AdminService
 
@@ -22,4 +22,12 @@ async def delete_user(organization_id: str, token: str, user_id: str):
     if not service.check_is_admin(token):
         return JSONResponse(content=None, status_code=401)
     service.delete_user(user_id)
+    return JSONResponse(content=None, status_code=200)
+
+@router.put('/user/role')
+async def update_role(organization_id: str, token: str, request: PutUserRoleRequest):
+    service = AdminService()
+    if not service.check_is_admin(token):
+        return JSONResponse(content=None, status_code=401)
+    service.update_role(request.id, request.role)
     return JSONResponse(content=None, status_code=200)

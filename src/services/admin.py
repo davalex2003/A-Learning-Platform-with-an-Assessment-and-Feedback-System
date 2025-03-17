@@ -32,3 +32,6 @@ class AdminService:
 
     def delete_user(self, user_id: str):
         self.repository.delete_user(user_id)
+
+    def update_role(self, user_id: str, role: str):
+        self.repository.update_role(user_id, role)
