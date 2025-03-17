@@ -35,3 +35,10 @@ class AdminRepository:
             data = cursor.fetchone()
         conn.close()
         return data
+    
+    def delete_user(self, user_id: str):
+        conn = self.connect_postgres()
+        with conn.cursor() as cursor:
+            cursor.execute(admin_queries.DELETE_USER, (user_id, ))
+        conn.commit()
+        conn.close()

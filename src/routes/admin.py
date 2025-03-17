@@ -15,3 +15,11 @@ async def get_user_list(organization_id: str, token: str, search_query: Optional
     if not service.check_is_admin(token):
         return JSONResponse(content=None, status_code=401)
     return service.get_users_list(search_query)
+
+@router.delete('/user')
+async def delete_user(organization_id: str, token: str, user_id: str):
+    service = AdminService()
+    if not service.check_is_admin(token):
+        return JSONResponse(content=None, status_code=401)
+    service.delete_user(user_id)
+    return JSONResponse(content=None, status_code=200)

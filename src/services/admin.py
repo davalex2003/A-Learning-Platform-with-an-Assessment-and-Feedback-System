@@ -29,3 +29,6 @@ class AdminService:
             else:
                 response.append(User(id=str(i[0]), full_name=FullName(first_name=i[1], second_name=i[2], middle_name=i[3]), email=i[4], role=i[5]))   
         return response
+
+    def delete_user(self, user_id: str):
+        self.repository.delete_user(user_id)
