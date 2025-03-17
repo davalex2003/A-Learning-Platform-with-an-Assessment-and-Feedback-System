@@ -1,2 +1,2 @@
 def get_hash_string(object):
-    return hash(object)
+    return str(hash(object))

@@ -3,7 +3,7 @@ import logging
 import psycopg2
 
 import repositories.queries.postgres.user as user_queries
-from schemas.user import UserRegisterRequest
+from schemas.user import UserRegisterRequest, UserAuthorizeRequest
 from utils.hash import get_hash_string
 
 class UserRepository:
@@ -21,26 +21,25 @@ class UserRepository:
             return
         return conn
 
-    def create_student(self, user: UserRegisterRequest):
+    def create_student(self, user: UserRegisterRequest) -> None:
         conn = self.connect()
         with conn.cursor() as cursor:
             cursor.execute(user_queries.CREATE_STUDENT, (user.email, get_hash_string(user.password), 'student', user.full_name.first_name, user.full_name.second_name, user.full_name.middle_name))
         conn.commit()
         conn.close()
 
-    # def validate_user(self, user: UserValidate) -> bool:
-    #     conn = self.connect()
-    #     with conn.cursor() as cursor:
-    #         cursor.execute('SELECT * FROM "user" WHERE e_mail = %s AND hash_password = %s',
-    #                        (user.e_mail, user.hash_password))
-    #         data = cursor.fetchall()
-    #     conn.close()
-    #     if len(data) == 0:
-    #         return False
-    #     else:
-    #         return True
+    def check_by_email_and_password(self, user: UserAuthorizeRequest) -> bool:
+        conn = self.connect()
+        with conn.cursor() as cursor:
+            cursor.execute(user_queries.GET_USER, (user.email, get_hash_string(user.password)))
+            data = cursor.fetchall()
+        conn.close()
+        if len(data) == 1:
+            return True
+        else:
+            return False
 
-    def validate_email(self, email: str) -> bool:
+    def check_by_email(self, email: str) -> bool:
         conn = self.connect()
         with conn.cursor() as cursor:
             cursor.execute(user_queries.SELECT_BY_EMAIL, (email,))

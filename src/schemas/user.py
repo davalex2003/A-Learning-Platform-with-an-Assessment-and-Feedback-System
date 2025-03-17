@@ -13,3 +13,10 @@ class UserRegisterRequest(BaseModel):
 
 class UserRegisterResponse201(BaseModel):
     token: str = Field(min_length=1)
+
+class UserAuthorizeRequest(BaseModel):
+    email: str = Field(min_length=1)
+    password: str = Field(min_length=8)
+
+class UserAuthorizeResponse200:
+    token: str = Field(min_length=1)
