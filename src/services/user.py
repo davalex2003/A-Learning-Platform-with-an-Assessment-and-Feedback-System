@@ -28,7 +28,7 @@ class UserService:
         if not user_data:
             return None
         data = self.repository.get_user_info(user_data['email'], get_hash_string(user_data['password']))
-        if not data:
+        if len(data) != 1:
             return None
         response = UserInfoResponse200(role=data[0][0], full_name=FullName(first_name=data[0][1], second_name=data[0][2], middle_name=data[0][3]), email=data[0][4])
         return response

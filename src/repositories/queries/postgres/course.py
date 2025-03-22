@@ -1,0 +1,1 @@
+CREATE_COURSE = 'INSERT INTO "course" (name, description, user_id) VALUES (%s, %s, %s) RETURNING id'
