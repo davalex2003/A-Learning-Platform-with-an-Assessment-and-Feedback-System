@@ -37,3 +37,10 @@ class CourseRepository:
             cursor.execute(course_queries.UPDATE_COURSE, (course.name, course.description, course_id))
         conn.commit()
         conn.close()
+    
+    def delete_course(self, course_id: str):
+        conn = self.connect_postgres()
+        with conn.cursor() as cursor:
+            cursor.execute(course_queries.DELETE_COURSE, (course_id,))
+        conn.commit()
+        conn.close()

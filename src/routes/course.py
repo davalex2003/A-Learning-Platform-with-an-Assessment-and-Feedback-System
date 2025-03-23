@@ -21,3 +21,10 @@ async def update_course(organization_id: str, token: str, course_id: str, course
     if service.update_course(course, token, course_id):
         return JSONResponse(content=None, status_code=200)
     return JSONResponse(content=None, status_code=401)
+
+@router.delete('/teacher')
+async def delete_course(organization_id: str, token: str, course_id: str):
+    service = CourseService()
+    if service.delete_course(token, course_id):
+        return JSONResponse(content=None, status_code=200)
+    return JSONResponse(content=None, status_code=401)
