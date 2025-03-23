@@ -4,7 +4,9 @@ from typing import Optional
 
 from schemas.admin import User, PutUserRoleRequest
 from schemas.common import Response400
+from schemas.course import CourseModel
 from services.admin import AdminService
+from services.course import CourseService
 
 router = APIRouter(prefix='/admin', tags=['admin'])
 
@@ -31,3 +33,10 @@ async def update_role(organization_id: str, token: str, request: PutUserRoleRequ
         return JSONResponse(content=None, status_code=401)
     service.update_role(request.id, request.role)
     return JSONResponse(content=None, status_code=200)
+
+@router.put('/course')
+async def update_course(organization_id: str, token: str, course_id: str, course: CourseModel):
+    service = CourseService()
+    if service.update_course(course, token, course_id):
+        return JSONResponse(content=None, status_code=200)
+    return JSONResponse(content=None, status_code=401)

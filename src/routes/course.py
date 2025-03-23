@@ -14,3 +14,10 @@ async def create_course(organization_id: str, token: str, course: CourseModel):
     if not course_id:
         return JSONResponse(content=None, status_code=401)
     return CourseCreateResponse201(course_id=course_id)
+
+@router.put('/teacher')
+async def update_course(organization_id: str, token: str, course_id: str, course: CourseModel):
+    service = CourseService()
+    if service.update_course(course, token, course_id):
+        return JSONResponse(content=None, status_code=200)
+    return JSONResponse(content=None, status_code=401)

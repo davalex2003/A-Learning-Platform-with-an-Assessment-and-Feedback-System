@@ -30,3 +30,10 @@ class CourseRepository:
         conn.commit()
         conn.close()
         return id
+    
+    def update_course(self, course: CourseModel, course_id: str):
+        conn = self.connect_postgres()
+        with conn.cursor() as cursor:
+            cursor.execute(course_queries.UPDATE_COURSE, (course.name, course.description, course_id))
+        conn.commit()
+        conn.close()
