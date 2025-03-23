@@ -62,12 +62,13 @@ paths:
                 404:
                     description: Организация не найдена
     
-    /course/list:
+    /course/teacher/list:
         get:
-            description: Получение списка курсов
+            description: Получение списка курсов учителя
             parameters:
               - $ref: '#/components/parameters/OrganizationID'
               - $ref: '#/components/parameters/Token'
+              - $ref: '#/components/parameters/SearchQuery'
             responses:
                 200:
                     description: OK
@@ -218,6 +219,15 @@ components:
             schema:
                 $ref: '#/components/schemas/NotEmptyString'
 
+        SearchQuery:
+            in: query
+            type: object
+            name: search_query
+            required: true
+            schema:
+                type: string
+                minLength: 3
+
     schemas:
         NotEmptyString:
             type: string
@@ -240,6 +250,7 @@ components:
               - id
               - name
               - description
+              - is_active
             properties:
                 id:
                     $ref: '#/components/schemas/NotEmptyString'
@@ -247,6 +258,8 @@ components:
                     $ref: '#/components/schemas/NotEmptyString'
                 description:
                     $ref: '#/components/schemas/NotEmptyString'
+                is_active:
+                    type: bool
 
         Addition:
             type: object

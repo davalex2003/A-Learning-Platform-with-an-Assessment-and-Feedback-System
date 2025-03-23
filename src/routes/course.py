@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 from starlette.responses import JSONResponse
+from typing import Optional
 
 from schemas.course import CourseModel, CourseCreateResponse201
 from services.course import CourseService
@@ -28,3 +29,11 @@ async def delete_course(organization_id: str, token: str, course_id: str):
     if service.delete_course(token, course_id):
         return JSONResponse(content=None, status_code=200)
     return JSONResponse(content=None, status_code=401)
+
+@router.get('/teacher/list')
+async def get_course_list(organization_id: str, token: str, search_query: Optional[str] = None):
+    service = CourseService()
+    courses = service.get_courses_list(token, search_query)
+    if not courses:
+        return JSONResponse(content=None, status_code=401)
+    return courses

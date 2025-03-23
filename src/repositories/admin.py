@@ -49,3 +49,11 @@ class AdminRepository:
             cursor.execute(admin_queries.CHANGE_USER_ROLE, (role, user_id))
         conn.commit()
         conn.close()
+    
+    def get_courses_list(self):
+        conn = self.connect_postgres()
+        with conn.cursor() as cursor:
+            cursor.execute(admin_queries.SELECT_COURSES_LIST)
+            data = cursor.fetchall()
+        conn.close()
+        return data

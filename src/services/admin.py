@@ -2,6 +2,7 @@ from typing import List, Optional
 
 from repositories.admin import AdminRepository
 from schemas.admin import User, FullName
+from schemas.common import Course
 from utils.jwt import decode_data
 
 ADMIN = 'admin'
@@ -21,7 +22,7 @@ class AdminService:
 
     def get_users_list(self, search_query: Optional[str] = None) -> List[User]:
         data = self.repository.get_users_list()
-        response : List[User] = []
+        response: List[User] = []
         for i in data:
             if search_query:
                 if search_query in i[1] or search_query in i[2] or search_query in i[3] or search_query in i[4]:
@@ -35,3 +36,14 @@ class AdminService:
 
     def update_role(self, user_id: str, role: str):
         self.repository.update_role(user_id, role)
+    
+    def get_courses_list(self, search_query: Optional[str] = None) -> List[Course]:
+        data = self.repository.get_courses_list()
+        response: List[Course] = []
+        for i in data:
+            if search_query:
+                if search_query in i[1] or search_query in i[2]:
+                    response.append(Course(id=str(i[0]), name=i[1], description=i[2], is_active=i[5]))
+            else:
+                response.append(Course(id=str(i[0]), name=i[1], description=i[2], is_active=i[5]))   
+        return response

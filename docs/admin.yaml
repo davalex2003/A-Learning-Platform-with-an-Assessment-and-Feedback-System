@@ -66,6 +66,7 @@ paths:
             parameters:
               - $ref: '#/components/parameters/OrganizationID'
               - $ref: '#/components/parameters/Token'
+              - $ref: '#/components/parameters/SearchQuery'
             responses:
                 200:
                     description: OK
@@ -206,6 +207,7 @@ components:
               - id
               - name
               - description
+              - is_active
             properties:
                 id:
                     $ref: '#/components/schemas/NotEmptyString'
@@ -213,6 +215,8 @@ components:
                     $ref: '#/components/schemas/NotEmptyString'
                 description:
                     $ref: '#/components/schemas/NotEmptyString'
+                is_active:
+                    type: bool
 
         AdminUserListResponse200:
             type: array

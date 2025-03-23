@@ -47,3 +47,10 @@ async def delete_course(organization_id: str, token: str, course_id: str):
     if service.delete_course(token, course_id):
         return JSONResponse(content=None, status_code=200)
     return JSONResponse(content=None, status_code=401)
+
+@router.get('/course/list')
+async def get_course_list(organization_id: str, token: str, search_query: Optional[str] = None):
+    service = AdminService()
+    if not service.check_is_admin(token):
+        return JSONResponse(content=None, status_code=401)
+    return service.get_courses_list(search_query)

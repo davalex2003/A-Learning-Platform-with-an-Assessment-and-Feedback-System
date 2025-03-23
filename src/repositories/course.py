@@ -44,3 +44,11 @@ class CourseRepository:
             cursor.execute(course_queries.DELETE_COURSE, (course_id,))
         conn.commit()
         conn.close()
+    
+    def get_courses_list(self, user_id: str):
+        conn = self.connect_postgres()
+        with conn.cursor() as cursor:
+            cursor.execute(course_queries.SELECT_COURSES_LIST_BY_USER_ID, (user_id,))
+            data = cursor.fetchall()
+        conn.close()
+        return data
