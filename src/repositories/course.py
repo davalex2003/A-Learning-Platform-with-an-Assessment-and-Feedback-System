@@ -1,7 +1,7 @@
 import json
 import logging
 import psycopg2
-import redis
+import typing
 
 import repositories.queries.postgres.common as common_queries
 import repositories.queries.postgres.course as course_queries
@@ -52,3 +52,18 @@ class CourseRepository:
             data = cursor.fetchall()
         conn.close()
         return data
+    
+    def get_course_links(self, course_id: str):
+        conn = self.connect_postgres()
+        with conn.cursor() as cursor:
+            cursor.execute(course_queries.SELECT_COURSE_LINKS, (course_id,))
+            data = cursor.fetchone()
+        conn.close()
+        return data
+    
+    def update_course_links(self, course_id: str, links: typing.List[str]):
+        conn = self.connect_postgres()
+        with conn.cursor() as cursor:
+            cursor.execute(course_queries.UPDATE_COURSE_LINKS, (json.dumps(links), course_id))
+        conn.commit()
+        conn.close()

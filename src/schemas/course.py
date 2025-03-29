@@ -6,3 +6,6 @@ class CourseModel(BaseModel):
 
 class CourseCreateResponse201(BaseModel):
     course_id: int
+
+class CourseAdditionsLinkRequest(BaseModel):
+    link: str = Field(min_length=1)

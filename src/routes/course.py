@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from starlette.responses import JSONResponse
 from typing import Optional
 
-from schemas.course import CourseModel, CourseCreateResponse201
+from schemas.course import CourseModel, CourseCreateResponse201, CourseAdditionsLinkRequest
 from services.course import CourseService
 
 router = APIRouter(prefix='/course', tags=['course'])
@@ -37,3 +37,10 @@ async def get_course_list(organization_id: str, token: str, search_query: Option
     if not courses:
         return JSONResponse(content=None, status_code=401)
     return courses
+
+@router.post('/teacher/additions/link')
+async def insert_link(organization_id: str, token: str, course_id: str, request: CourseAdditionsLinkRequest):
+    service = CourseService()
+    if service.insert_course_link(token, course_id, request.link):
+        return JSONResponse(content=None, status_code=201)
+    return JSONResponse(content=None, status_code=401)

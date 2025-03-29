@@ -70,3 +70,22 @@ class CourseService():
             else:
                 response.append(Course(id=str(i[0]), name=i[1], description=i[2], is_active=i[5]))   
         return response
+    
+    def insert_course_link(self, token: str, course_id: str, link: str) -> bool:
+        user_data = decode_data(token)
+        if not user_data:
+            return False
+        data = self.user_repository.get_user_info(user_data['email'], get_hash_string(user_data['password']))
+        if len(data) != 1:
+            return False
+        if data[0][0] != TEACHER or not data[0][5]:
+            return False
+        links = self.course_repository.get_course_links(course_id)[0]
+        if links is None:
+            links = [link]
+        else:
+            links.append(link)
+        self.course_repository.update_course_links(course_id, links)
+        return True
+        
+        
