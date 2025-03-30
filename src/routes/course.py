@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, File, UploadFile
 from starlette.responses import JSONResponse
 from typing import Optional
 
@@ -42,5 +42,12 @@ async def get_course_list(organization_id: str, token: str, search_query: Option
 async def insert_link(organization_id: str, token: str, course_id: str, request: CourseAdditionsLinkRequest):
     service = CourseService()
     if service.insert_course_link(token, course_id, request.link):
+        return JSONResponse(content=None, status_code=201)
+    return JSONResponse(content=None, status_code=401)
+
+@router.post('/additions/material')
+async def add_material(organization_id: str, token: str, course_id: str, file: UploadFile = File(...)):
+    service = CourseService()
+    if await service.insert_course_material(token, course_id, file):
         return JSONResponse(content=None, status_code=201)
     return JSONResponse(content=None, status_code=401)

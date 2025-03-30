@@ -87,5 +87,23 @@ class CourseService():
             links.append(link)
         self.course_repository.update_course_links(course_id, links)
         return True
-        
-        
+
+    async def insert_course_material(self, token: str, course_id: str, material) -> bool:
+        user_data = decode_data(token)
+        if not user_data:
+            return False
+        data = self.user_repository.get_user_info(user_data['email'], get_hash_string(user_data['password']))
+        if len(data) != 1:
+            return False
+        if data[0][0] != TEACHER or not data[0][5]:
+            return False
+        materials = self.course_repository.get_course_materials(course_id)[0]
+        if materials is None:
+            materials = [material.filename]
+        else:
+            materials.append(material.filename)
+        self.course_repository.update_course_materials(course_id, materials)
+        with open(material.filename, "wb") as f:
+            content = await material.read()
+            f.write(content)
+        return True

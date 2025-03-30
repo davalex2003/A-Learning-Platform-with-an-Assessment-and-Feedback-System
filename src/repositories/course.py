@@ -67,3 +67,18 @@ class CourseRepository:
             cursor.execute(course_queries.UPDATE_COURSE_LINKS, (json.dumps(links), course_id))
         conn.commit()
         conn.close()
+
+    def get_course_materials(self, course_id: str):
+        conn = self.connect_postgres()
+        with conn.cursor() as cursor:
+            cursor.execute(course_queries.SELECT_COURSE_MATEIALS, (course_id,))
+            data = cursor.fetchone()
+        conn.close()
+        return data
+
+    def update_course_materials(self, course_id: str, materials: typing.List[str]):
+        conn = self.connect_postgres()
+        with conn.cursor() as cursor:
+            cursor.execute(course_queries.UPDATE_COURSE_MATERIALS, (json.dumps(materials), course_id))
+        conn.commit()
+        conn.close()

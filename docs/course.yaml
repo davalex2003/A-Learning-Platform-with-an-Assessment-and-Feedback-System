@@ -169,6 +169,13 @@ paths:
                                 file:
                                     type: string
                                     format: binary
+            responses:
+                201:
+                    description: OK
+                401:
+                    description: Unauthorized
+                404:
+                    description: Организация не найдена
 
     /course/student/add:
         post:
