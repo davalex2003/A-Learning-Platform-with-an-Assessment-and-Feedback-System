@@ -1,3 +1,4 @@
+from enum import Enum
 from pydantic import BaseModel, Field
 
 class CourseModel(BaseModel):
@@ -17,3 +18,7 @@ class Addition(BaseModel):
 class CourseAdditionsResponse200(BaseModel):
     materials: list[Addition]
     links: list[Addition]
+
+class AdditionType(str, Enum):
+    link = 'link'
+    material = 'material'

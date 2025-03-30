@@ -105,6 +105,7 @@ paths:
               - $ref: '#/components/parameters/OrganizationID'
               - $ref: '#/components/parameters/Token'
               - $ref: '#/components/parameters/CourseID'
+              - $ref: '#/components/parameters/AdditionType'
               - $ref: '#/components/parameters/AdditionID'
             responses:
                 200:
@@ -236,6 +237,17 @@ components:
             schema:
                 type: string
                 minLength: 3
+        
+        AdditionType:
+            in: query
+            type: object
+            name: addition_type
+            required: true
+            schema:
+                type: string
+                enum:
+                  - link
+                  - material
 
     schemas:
         NotEmptyString:

@@ -2,7 +2,7 @@ from fastapi import APIRouter, File, UploadFile
 from starlette.responses import JSONResponse, FileResponse
 from typing import Optional
 
-from schemas.course import CourseModel, CourseCreateResponse201, CourseAdditionsLinkRequest
+from schemas.course import CourseModel, CourseCreateResponse201, CourseAdditionsLinkRequest, AdditionType
 from services.course import CourseService
 
 router = APIRouter(prefix='/course', tags=['course'])
@@ -64,4 +64,13 @@ async def get_additions(organization_id: str, token: str, course_id: str):
 async def get_material(organization_id: str, token: str, course_id: str, addition_id: str):
     service = CourseService()
     material = service.get_course_material(token, course_id, addition_id)
+    if material is None:
+        return JSONResponse(content=None, status_code=401)
     return FileResponse(path=material, media_type='application/octet-stream', filename=material)
+
+@router.delete('/additions')
+async def delete_addition(organization_id: str, token: str, course_id: str, addition_id: str, addition_type: AdditionType):
+    service = CourseService()
+    if service.delete_course_addition(token, course_id, addition_id, addition_type):
+        return JSONResponse(content=None, status_code=200)
+    return JSONResponse(content=None, status_code=401)

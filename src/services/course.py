@@ -1,3 +1,4 @@
+from os import remove
 from typing import Optional, List
 
 from repositories.course import CourseRepository
@@ -9,6 +10,8 @@ from utils.jwt import decode_data
 
 ADMIN = 'admin'
 TEACHER = 'teacher'
+LINK = 'link'
+MATERIAL = 'material'
 
 class CourseService():
     def __init__(self):
@@ -120,12 +123,14 @@ class CourseService():
         additions = self.course_repository.get_links_and_materials(course_id)
         links = []
         materials = []
-        if additions is None or additions[0] is None:
+        if additions is None:
             return CourseAdditionsResponse200(materials=materials, links=links)
-        for i in range(len(additions[0])):
-            links.append({'id': str(i + 1), 'name': additions[0][i]})
-        for i in range(len(additions[1])):
-            materials.append({'id': str(i + 1), 'name': additions[1][i]})
+        if additions[0] is not None:
+            for i in range(len(additions[0])):
+                links.append({'id': str(i + 1), 'name': additions[0][i]})
+        if additions[1] is not None:
+            for i in range(len(additions[1])):
+                materials.append({'id': str(i + 1), 'name': additions[1][i]})
         return CourseAdditionsResponse200(materials=materials, links=links)
     
     def get_course_material(self, token: str, course_id: str, addition_id: str):
@@ -144,3 +149,31 @@ class CourseService():
         if len(materials) < int(addition_id):
             return None
         return materials[int(addition_id) - 1]
+    
+    def delete_course_addition(self, token: str, course_id: str, addition_id: str, addition_type: str):
+        user_data = decode_data(token)
+        if not user_data:
+            return False
+        data = self.user_repository.get_user_info(user_data['email'], get_hash_string(user_data['password']))
+        if len(data) != 1:
+            return False
+        if data[0][0] != TEACHER or not data[0][5]:
+            return False
+        additions = self.course_repository.get_links_and_materials(course_id)
+        if additions is None:
+            return True
+        if addition_type == LINK:
+            links = additions[0]
+            if links is None:
+                return True
+            links.pop(int(addition_id) - 1)
+            self.course_repository.update_course_links(course_id, links)
+        else:
+            materials = additions[1]
+            if materials is None:
+                return True
+            material = materials[int(addition_id) - 1]
+            materials.pop(int(addition_id) - 1)
+            remove(material)
+            self.course_repository.update_course_materials(course_id, materials)
+        return True
