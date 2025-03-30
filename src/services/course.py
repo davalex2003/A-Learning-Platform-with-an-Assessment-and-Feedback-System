@@ -120,8 +120,27 @@ class CourseService():
         additions = self.course_repository.get_links_and_materials(course_id)
         links = []
         materials = []
+        if additions is None or additions[0] is None:
+            return CourseAdditionsResponse200(materials=materials, links=links)
         for i in range(len(additions[0])):
             links.append({'id': str(i + 1), 'name': additions[0][i]})
         for i in range(len(additions[1])):
             materials.append({'id': str(i + 1), 'name': additions[1][i]})
         return CourseAdditionsResponse200(materials=materials, links=links)
+    
+    def get_course_material(self, token: str, course_id: str, addition_id: str):
+        user_data = decode_data(token)
+        if not user_data:
+            return None
+        data = self.user_repository.get_user_info(user_data['email'], get_hash_string(user_data['password']))
+        if len(data) != 1:
+            return None
+        if not data[0][5]:
+            return None
+        materials = self.course_repository.get_course_materials(course_id)
+        if materials is None or materials[0] is None:
+            return None
+        materials = materials[0]
+        if len(materials) < int(addition_id):
+            return None
+        return materials[int(addition_id) - 1]

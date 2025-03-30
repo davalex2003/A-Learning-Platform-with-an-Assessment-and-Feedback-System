@@ -152,7 +152,7 @@ paths:
                                 type: string
                                 format: binary
                 404:
-                    description: Организация не найдена
+                    description: Организация или материал не найдены
         post:
             description: Добавление материала курса
             parameters:
