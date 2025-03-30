@@ -95,6 +95,8 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/CourseAdditionsResponse200'
+                401:
+                    description: Unauthorized
                 404:
                     description: Организация не найдена
         delete:

@@ -3,7 +3,7 @@ from typing import Optional, List
 from repositories.course import CourseRepository
 from repositories.user import UserRepository
 from schemas.common import Course
-from schemas.course import CourseModel
+from schemas.course import CourseModel, CourseAdditionsResponse200
 from utils.hash import get_hash_string
 from utils.jwt import decode_data
 
@@ -107,3 +107,21 @@ class CourseService():
             content = await material.read()
             f.write(content)
         return True
+    
+    def get_links_and_materials(self, token: str, course_id: str) -> Optional[CourseAdditionsResponse200]:
+        user_data = decode_data(token)
+        if not user_data:
+            return None
+        data = self.user_repository.get_user_info(user_data['email'], get_hash_string(user_data['password']))
+        if len(data) != 1:
+            return None
+        if not data[0][5]:
+            return None
+        additions = self.course_repository.get_links_and_materials(course_id)
+        links = []
+        materials = []
+        for i in range(len(additions[0])):
+            links.append({'id': str(i + 1), 'name': additions[0][i]})
+        for i in range(len(additions[1])):
+            materials.append({'id': str(i + 1), 'name': additions[1][i]})
+        return CourseAdditionsResponse200(materials=materials, links=links)

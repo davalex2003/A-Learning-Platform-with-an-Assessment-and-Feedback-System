@@ -9,3 +9,11 @@ class CourseCreateResponse201(BaseModel):
 
 class CourseAdditionsLinkRequest(BaseModel):
     link: str = Field(min_length=1)
+
+class Addition(BaseModel):
+    id: str = Field(min_length=1)
+    name: str = Field(min_length=1)
+
+class CourseAdditionsResponse200(BaseModel):
+    materials: list[Addition]
+    links: list[Addition]

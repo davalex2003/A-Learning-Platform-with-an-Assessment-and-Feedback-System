@@ -51,3 +51,11 @@ async def add_material(organization_id: str, token: str, course_id: str, file: U
     if await service.insert_course_material(token, course_id, file):
         return JSONResponse(content=None, status_code=201)
     return JSONResponse(content=None, status_code=401)
+
+@router.get('/additions')
+async def get_additions(organization_id: str, token: str, course_id: str):
+    service = CourseService()
+    additions = service.get_links_and_materials(token, course_id)
+    if not additions:
+        return JSONResponse(content=None, status_code=401)
+    return additions
