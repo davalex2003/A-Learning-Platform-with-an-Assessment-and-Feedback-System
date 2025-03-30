@@ -74,3 +74,10 @@ async def delete_addition(organization_id: str, token: str, course_id: str, addi
     if service.delete_course_addition(token, course_id, addition_id, addition_type):
         return JSONResponse(content=None, status_code=200)
     return JSONResponse(content=None, status_code=401)
+
+@router.post('/student/add')
+async def add_student_to_course(organization_id: str, token: str, course_id: str):
+    service = CourseService()
+    if service.add_user_course_link(token, course_id):
+        return JSONResponse(content=None, status_code=201)
+    return JSONResponse(content=None, status_code=401)

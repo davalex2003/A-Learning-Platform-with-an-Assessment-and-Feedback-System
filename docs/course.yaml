@@ -188,7 +188,7 @@ paths:
               - $ref: '#/components/parameters/Token'
               - $ref: '#/components/parameters/CourseID'
             responses:
-                200:
+                201:
                     description: OK
                 401:
                     description: Unauthorized

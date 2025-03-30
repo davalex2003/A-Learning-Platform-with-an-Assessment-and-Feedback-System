@@ -90,3 +90,10 @@ class CourseRepository:
             data = cursor.fetchone()
         conn.close()
         return data
+    
+    def add_course_user_link(self, user_id: str, course_id: str):
+        conn = self.connect_postgres()
+        with conn.cursor() as cursor:
+            cursor.execute(course_queries.CREATE_COURSE_USER_LINK, (user_id, course_id))
+        conn.commit()
+        conn.close()

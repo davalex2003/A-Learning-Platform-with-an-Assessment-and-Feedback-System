@@ -10,6 +10,7 @@ from utils.jwt import decode_data
 
 ADMIN = 'admin'
 TEACHER = 'teacher'
+STUDENT = 'student'
 LINK = 'link'
 MATERIAL = 'material'
 
@@ -176,4 +177,16 @@ class CourseService():
             materials.pop(int(addition_id) - 1)
             remove(material)
             self.course_repository.update_course_materials(course_id, materials)
+        return True
+
+    def add_user_course_link(self, token: str, course_id: str):
+        user_data = decode_data(token)
+        if not user_data:
+            return False
+        data = self.user_repository.get_user_info(user_data['email'], get_hash_string(user_data['password']))
+        if len(data) != 1:
+            return False
+        if data[0][0] != STUDENT or not data[0][5]:
+            return False
+        self.course_repository.add_course_user_link(data[0][6], course_id)
         return True
