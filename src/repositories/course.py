@@ -97,3 +97,11 @@ class CourseRepository:
             cursor.execute(course_queries.CREATE_COURSE_USER_LINK, (user_id, course_id))
         conn.commit()
         conn.close()
+    
+    def get_courses(self, user_id: str):
+        conn = self.connect_postgres()
+        with conn.cursor() as cursor:
+            cursor.execute(course_queries.SELECT_COURSES_LIST, (user_id,))
+            data = cursor.fetchall()
+        conn.close()
+        return data

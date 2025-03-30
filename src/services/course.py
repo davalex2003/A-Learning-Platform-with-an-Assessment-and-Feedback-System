@@ -190,3 +190,23 @@ class CourseService():
             return False
         self.course_repository.add_course_user_link(data[0][6], course_id)
         return True
+    
+    def get_courses_student_list(self, token: str, search_query: Optional[str] = None) -> Optional[List[Course]]:
+        user_data = decode_data(token)
+        if not user_data:
+            return None
+        data = self.user_repository.get_user_info(user_data['email'], get_hash_string(user_data['password']))
+        if len(data) != 1:
+            return None
+        if data[0][0] != STUDENT or not data[0][5]:
+            return None
+        user_id = data[0][6]
+        data = self.course_repository.get_courses(user_id)
+        response: List[Course] = []
+        for i in data:
+            if search_query:
+                if search_query in i[1] or search_query in i[2]:
+                    response.append(Course(id=str(i[0]), name=i[1], description=i[2], is_active=i[3]))
+            else:
+                response.append(Course(id=str(i[0]), name=i[1], description=i[2], is_active=i[3]))   
+        return response

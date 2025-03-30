@@ -230,7 +230,7 @@ paths:
                 404:
                     description: Пользователь не найден
 
-    /course/teacher:
+    /api/course/teacher:
         post:
             description: Создание курса
             parameters:
@@ -286,12 +286,13 @@ paths:
                 404:
                     description: Организация не найдена
     
-    /course/list:
+    api/course/teacher/list:
         get:
-            description: Получение списка курсов
+            description: Получение списка курсов учителя
             parameters:
               - $ref: '#/components/parameters/OrganizationID'
               - $ref: '#/components/parameters/Token'
+              - $ref: '#/components/parameters/SearchQuery'
             responses:
                 200:
                     description: OK
@@ -304,7 +305,7 @@ paths:
                 404:
                     description: Организация не найдена
 
-    /course/additions:
+    /api/course/additions:
         get:
             description: Получение списка материалов и ссылок
             parameters:
@@ -326,6 +327,7 @@ paths:
               - $ref: '#/components/parameters/OrganizationID'
               - $ref: '#/components/parameters/Token'
               - $ref: '#/components/parameters/CourseID'
+              - $ref: '#/components/parameters/AdditionType'
               - $ref: '#/components/parameters/AdditionID'
             responses:
                 200:
@@ -335,7 +337,7 @@ paths:
                 404:
                     description: Организация не найдена
 
-    /course/teacher/additions/link:
+    /api/course/teacher/additions/link:
         post:
             description: Добавление ссылки в дополнения курса
             parameters:
@@ -356,7 +358,7 @@ paths:
                 404:
                     description: Организация не найдена
     
-    /course/additions/material:
+    /api/course/additions/material:
         get:
             description: Скачивание материала курса
             parameters:
@@ -393,7 +395,7 @@ paths:
                                     type: string
                                     format: binary
 
-    /course/student/add:
+    /api/course/student/add:
         post:
             description: Запись студента на курс
             parameters:
@@ -407,6 +409,25 @@ paths:
                     description: Unauthorized
                 404:
                     description: Организация или курс не найдены
+
+    /api/course/student/list:
+        get:
+            description: Получение списка курсов студента
+            parameters:
+              - $ref: '#/components/parameters/OrganizationID'
+              - $ref: '#/components/parameters/Token'
+              - $ref: '#/components/parameters/SearchQuery'
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CourseListResponse200'
+                401:
+                    description: Unauthorized
+                404:
+                    description: Организация не найдена
 
 components:
     parameters:
@@ -449,6 +470,34 @@ components:
             required: true
             schema:
                 $ref: '#/components/schemas/NotEmptyString'
+
+        SearchQuery:
+            in: query
+            type: object
+            name: search_query
+            required: true
+            schema:
+                type: string
+                minLength: 3
+
+        AdditionID:
+            in: query
+            type: object
+            name: addition_id
+            required: true
+            schema:
+                $ref: '#/components/schemas/NotEmptyString'
+
+        AdditionType:
+            in: query
+            type: object
+            name: addition_type
+            required: true
+            schema:
+                type: string
+                enum:
+                  - link
+                  - material
 
     schemas:
         NotEmptyString:
@@ -729,4 +778,12 @@ components:
               - link
             properties:
                 link:
+                    $ref: '#/components/schemas/NotEmptyString'
+
+        Token:
+            type: object
+            required:
+              - token
+            properties:
+                token:
                     $ref: '#/components/schemas/NotEmptyString'

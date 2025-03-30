@@ -34,7 +34,7 @@ async def delete_course(organization_id: str, token: str, course_id: str):
 async def get_course_list(organization_id: str, token: str, search_query: Optional[str] = None):
     service = CourseService()
     courses = service.get_courses_list(token, search_query)
-    if not courses:
+    if courses is None:
         return JSONResponse(content=None, status_code=401)
     return courses
 
@@ -81,3 +81,11 @@ async def add_student_to_course(organization_id: str, token: str, course_id: str
     if service.add_user_course_link(token, course_id):
         return JSONResponse(content=None, status_code=201)
     return JSONResponse(content=None, status_code=401)
+
+@router.get('/student/list')
+async def get_student_courses_list(organization_id: str, token: str, search_query: Optional[str] = None):
+    service = CourseService()
+    courses = service.get_courses_student_list(token, search_query)
+    if courses is None:
+        return JSONResponse(content=None, status_code=401)
+    return courses

@@ -194,6 +194,25 @@ paths:
                     description: Unauthorized
                 404:
                     description: Организация или курс не найдены
+    
+    /course/student/list:
+        get:
+            description: Получение списка курсов студента
+            parameters:
+              - $ref: '#/components/parameters/OrganizationID'
+              - $ref: '#/components/parameters/Token'
+              - $ref: '#/components/parameters/SearchQuery'
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CourseListResponse200'
+                401:
+                    description: Unauthorized
+                404:
+                    description: Организация не найдена
 
 components:
     parameters:
