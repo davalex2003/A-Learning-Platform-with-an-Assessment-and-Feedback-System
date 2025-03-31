@@ -2,3 +2,4 @@ SELECT_USERS_LIST = 'SELECT id, first_name, second_name, middle_name, email, rol
 DELETE_USER = 'DELETE FROM "user" WHERE id = %s'
 CHANGE_USER_ROLE = 'UPDATE "user" SET role = %s WHERE id = %s'
 SELECT_COURSES_LIST = 'SELECT * FROM "course"'
+CREATE_ADMIN = 'INSERT into "user" (email, first_name, second_name, middle_name, hash_password, role, has_confirmed_email) VALUES (%s, %s, %s, %s, %s, %s, %s)'

@@ -1,9 +1,10 @@
 from typing import List, Optional
 
 from repositories.admin import AdminRepository
-from schemas.admin import User, FullName
+from schemas.admin import User, FullName, AdminCreateRequest
 from schemas.common import Course
 from utils.jwt import decode_data
+from utils.hash import get_hash_string
 
 ADMIN = 'admin'
 
@@ -47,3 +48,7 @@ class AdminService:
             else:
                 response.append(Course(id=str(i[0]), name=i[1], description=i[2], is_active=i[5]))   
         return response
+    
+    def create_admin(self, admin: AdminCreateRequest):
+        self.repository.create_admin(admin.email, admin.full_name.first_name, admin.full_name.second_name,
+                                     admin.full_name.middle_name, get_hash_string(admin.password))

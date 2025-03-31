@@ -1,9 +1,12 @@
 import json
 import logging
 import psycopg2
+from typing import Optional
 
 import repositories.queries.postgres.admin as admin_queries
 import repositories.queries.postgres.common as common_queries
+
+ADMIN = 'admin'
 
 class AdminRepository:
 
@@ -57,3 +60,10 @@ class AdminRepository:
             data = cursor.fetchall()
         conn.close()
         return data
+
+    def create_admin(self, email: str, first_name: str, second_name: str, middle_name: Optional[str], hash_password: str):
+        conn = self.connect_postgres()
+        with conn.cursor() as cursor:
+            cursor.execute(admin_queries.CREATE_ADMIN, (email, first_name, second_name, middle_name, hash_password, ADMIN, True))
+        conn.commit()
+        conn.close()
