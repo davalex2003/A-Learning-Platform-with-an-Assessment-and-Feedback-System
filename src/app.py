@@ -1,6 +1,6 @@
-from fastapi import FastAPI, UploadFile, File, Request, WebSocket
+from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
-from starlette.responses import JSONResponse, FileResponse
+from starlette.responses import JSONResponse
 
 from routes.admin import router as admin_router
 from routes.api import router as api_router

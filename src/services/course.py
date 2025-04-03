@@ -84,7 +84,10 @@ class CourseService():
             return False
         if data[0][0] != TEACHER or not data[0][5]:
             return False
-        links = self.course_repository.get_course_links(course_id)[0]
+        links = self.course_repository.get_course_links(course_id)
+        if links is None:
+            return True
+        links = links[0]
         if links is None:
             links = [link]
         else:

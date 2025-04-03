@@ -16,8 +16,10 @@ class AdminService:
         user_data = decode_data(token)
         if not user_data:
             return False
-        role = self.repository.get_role(user_data['email'])[0]
-        if role != ADMIN:
+        role = self.repository.get_role(user_data['email'])
+        if not role:
+            return False
+        if role[0] != ADMIN:
             return False
         return True
 
