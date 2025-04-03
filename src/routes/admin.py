@@ -2,8 +2,7 @@ from fastapi import APIRouter
 from starlette.responses import JSONResponse
 from typing import Optional
 
-from schemas.admin import User, PutUserRoleRequest
-from schemas.common import Response400
+from schemas.admin import PutUserRoleRequest
 from schemas.course import CourseModel
 from services.admin import AdminService
 from services.course import CourseService
