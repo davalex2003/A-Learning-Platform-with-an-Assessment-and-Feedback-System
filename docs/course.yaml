@@ -99,6 +99,8 @@ paths:
                     description: Unauthorized
                 404:
                     description: Организация не найдена
+
+    /course/teacher/additions:
         delete:
             description: Удаление материала или ссылки
             parameters:
@@ -154,6 +156,8 @@ paths:
                                 format: binary
                 404:
                     description: Организация или материал не найдены
+
+    /course/teacher/additions/material:
         post:
             description: Добавление материала курса
             parameters:

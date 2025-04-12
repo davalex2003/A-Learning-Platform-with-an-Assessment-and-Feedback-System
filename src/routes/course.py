@@ -45,7 +45,7 @@ async def insert_link(organization_id: str, token: str, course_id: str, request:
         return JSONResponse(content=None, status_code=201)
     return JSONResponse(content=None, status_code=401)
 
-@router.post('/additions/material')
+@router.post('/teacher/additions/material')
 async def add_material(organization_id: str, token: str, course_id: str, file: UploadFile = File(...)):
     service = CourseService()
     if await service.insert_course_material(token, course_id, file):
@@ -68,7 +68,7 @@ async def get_material(organization_id: str, token: str, course_id: str, additio
         return JSONResponse(content=None, status_code=401)
     return FileResponse(path=material, media_type='application/octet-stream', filename=material)
 
-@router.delete('/additions')
+@router.delete('/teacher/additions')
 async def delete_addition(organization_id: str, token: str, course_id: str, addition_id: str, addition_type: AdditionType):
     service = CourseService()
     if service.delete_course_addition(token, course_id, addition_id, addition_type):
