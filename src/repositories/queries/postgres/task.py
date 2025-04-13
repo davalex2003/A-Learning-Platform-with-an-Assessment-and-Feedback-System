@@ -1,0 +1,1 @@
+CREATE_TASK = 'INSERT INTO "task" (assignment_id, question_type, question_text, question_file, answer_type, answer_variants) VALUES (%s, %s, %s, %s, %s, %s)'

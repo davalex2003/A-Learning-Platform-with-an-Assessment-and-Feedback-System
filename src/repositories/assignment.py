@@ -3,7 +3,6 @@ import logging
 import psycopg2
 
 import repositories.queries.postgres.assignment as assignment_queries
-
 from schemas.assignment import AssignmentModel
 
 class AssignmentRepository:
