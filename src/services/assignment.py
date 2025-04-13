@@ -1,11 +1,13 @@
-from typing import Optional
+from typing import List, Optional
 
 from repositories.assignment import AssignmentRepository
 from repositories.user import UserRepository
 from schemas.assignment import AssignmentModel
+from schemas.common import Assignment
 from utils.hash import get_hash_string
 from utils.jwt import decode_data
 
+STUDENT = 'student'
 TEACHER = 'teacher'
 
 class AssignmentService():
@@ -47,3 +49,18 @@ class AssignmentService():
             return False
         self.assignment_repository.delete_assignment(assignment_id)
         return True
+
+    def get_assignments(self, course_id: str, token: str) -> Optional[List[Assignment]]:
+        user_data = decode_data(token)
+        if not user_data:
+            return None
+        data = self.user_repository.get_user_info(user_data['email'], get_hash_string(user_data['password']))
+        if len(data) != 1:
+            return None
+        if data[0][0] not in [STUDENT, TEACHER] or not data[0][5]:
+            return None
+        data = self.assignment_repository.get_assignments(course_id)
+        response: List[Assignment] = []
+        for i in data:
+            response.append(Assignment(id=str(i[0]), name=i[1], started_at=i[2], ended_at=i[3]))
+        return response

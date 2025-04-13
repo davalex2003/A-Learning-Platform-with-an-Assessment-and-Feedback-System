@@ -28,3 +28,11 @@ async def delete_assignment(organization_id: str, token: str, assignment_id: str
     if service.delete_assignment(assignment_id, token):
         return JSONResponse(content=None, status_code=200)
     return JSONResponse(content=None, status_code=401)
+
+@router.get('/list')
+async def get_assignments(organization_id: str, token: str, course_id: str):
+    service = AssignmentService()
+    assignments = service.get_assignments(course_id, token)
+    if assignments is None:
+        return JSONResponse(content=None, status_code=401)
+    return assignments

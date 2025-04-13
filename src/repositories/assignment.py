@@ -43,3 +43,11 @@ class AssignmentRepository:
             cursor.execute(assignment_queries.DELETE_ASSIGNMENT, (assignment_id,))
         conn.commit()
         conn.close()
+
+    def get_assignments(self, course_id: str):
+        conn = self.connect_postgres()
+        with conn.cursor() as cursor:
+            cursor.execute(assignment_queries.SELECT_ASSIGNMENTS, (course_id,))
+            data = cursor.fetchall()
+        conn.close()
+        return data

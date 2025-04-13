@@ -63,6 +63,25 @@ paths:
                 404:
                     description: Организация не найдена
 
+    /assignment/list:
+        get:
+            description: Получить список заданий
+            parameters:
+              - $ref: '#/components/parameters/OrganizationID'
+              - $ref: '#/components/parameters/Token'
+              - $ref: '#/components/parameters/CourseID'
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/AssignmentListResponse200'
+                401:
+                    description: Unauthorized
+                404:
+                    description: Организация не найдена
+
 components:
     parameters:
         OrganizationID:
@@ -122,3 +141,24 @@ components:
             properties:
                 assignment_id:
                     $ref: '#/components/schemas/NotEmptyString'
+
+        Assignment:
+            type: object
+            required:
+              - id
+              - name
+              - started_at
+            properties:
+                id:
+                    $ref: '#/components/schemas/NotEmptyString'
+                name:
+                    $ref: '#/components/schemas/NotEmptyString'
+                started_at:
+                    type: datetime
+                ended_at:
+                    type: datetime
+
+        AssignmentListResponse200:
+            type: array
+            items:
+                $ref: '#/components/schemas/Assignment'
