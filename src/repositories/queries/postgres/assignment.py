@@ -1,0 +1,1 @@
+CREATE_ASSIGNMENT = 'INSERT INTO "assignment" (course_id, name, started_at, ended_at) VALUES (%s, %s, %s, %s) RETURNING id'

@@ -4,6 +4,7 @@ from starlette.responses import JSONResponse
 
 from routes.admin import router as admin_router
 from routes.api import router as api_router
+from routes.assignment import router as assignment_router
 from routes.course import router as course_router
 from routes.user import router as user_router
 
@@ -19,6 +20,7 @@ app.add_middleware(
 
 app.include_router(admin_router)
 app.include_router(api_router)
+app.include_router(assignment_router)
 app.include_router(course_router)
 app.include_router(user_router)
 

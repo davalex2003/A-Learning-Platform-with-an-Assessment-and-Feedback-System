@@ -28,8 +28,7 @@ class CourseService():
             return None
         if data[0][0] != TEACHER or not data[0][5]:
             return None
-        id = self.course_repository.create_course(course, data[0][6])
-        return id
+        return self.course_repository.create_course(course, data[0][6])
     
     def update_course(self, course: CourseModel, token: str, course_id: str) -> bool:
         user_data = decode_data(token)

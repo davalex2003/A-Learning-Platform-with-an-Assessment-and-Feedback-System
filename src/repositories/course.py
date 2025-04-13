@@ -3,7 +3,6 @@ import logging
 import psycopg2
 import typing
 
-import repositories.queries.postgres.common as common_queries
 import repositories.queries.postgres.course as course_queries
 from schemas.course import CourseModel
 
