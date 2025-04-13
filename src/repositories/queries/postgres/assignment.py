@@ -1,1 +1,2 @@
 CREATE_ASSIGNMENT = 'INSERT INTO "assignment" (course_id, name, started_at, ended_at) VALUES (%s, %s, %s, %s) RETURNING id'
+UPDATE_ASSIGNMENT = 'UPDATE "assignment" SET name = %s, started_at = %s, ended_at = %s WHERE id = %s'

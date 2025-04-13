@@ -29,3 +29,10 @@ class AssignmentRepository:
         conn.commit()
         conn.close()
         return id
+
+    def update_assignment(self, assignment: AssignmentModel, assignment_id: str):
+        conn = self.connect_postgres()
+        with conn.cursor() as cursor:
+            cursor.execute(assignment_queries.UPDATE_ASSIGNMENT, (assignment.name, assignment.started_at, assignment.ended_at, assignment_id))
+        conn.commit()
+        conn.close()
