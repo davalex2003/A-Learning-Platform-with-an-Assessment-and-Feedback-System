@@ -21,3 +21,10 @@ async def update_assignment(organization_id: str, token: str, assignment_id: str
     if service.update_assignment(assignment, assignment_id, token):
         return JSONResponse(content=None, status_code=200)
     return JSONResponse(content=None, status_code=401)
+
+@router.delete('/teacher')
+async def delete_assignment(organization_id: str, token: str, assignment_id: str):
+    service = AssignmentService()
+    if service.delete_assignment(assignment_id, token):
+        return JSONResponse(content=None, status_code=200)
+    return JSONResponse(content=None, status_code=401)

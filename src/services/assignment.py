@@ -35,3 +35,15 @@ class AssignmentService():
             return False
         self.assignment_repository.update_assignment(assignment, assignment_id)
         return True
+
+    def delete_assignment(self, assignment_id: str, token: str) -> bool:
+        user_data = decode_data(token)
+        if not user_data:
+            return False
+        data = self.user_repository.get_user_info(user_data['email'], get_hash_string(user_data['password']))
+        if len(data) != 1:
+            return False
+        if data[0][0] != TEACHER or not data[0][5]:
+            return False
+        self.assignment_repository.delete_assignment(assignment_id)
+        return True

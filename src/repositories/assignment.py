@@ -36,3 +36,10 @@ class AssignmentRepository:
             cursor.execute(assignment_queries.UPDATE_ASSIGNMENT, (assignment.name, assignment.started_at, assignment.ended_at, assignment_id))
         conn.commit()
         conn.close()
+
+    def delete_assignment(self, assignment_id: str):
+        conn = self.connect_postgres()
+        with conn.cursor() as cursor:
+            cursor.execute(assignment_queries.DELETE_ASSIGNMENT, (assignment_id,))
+        conn.commit()
+        conn.close()
