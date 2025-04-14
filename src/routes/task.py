@@ -15,8 +15,15 @@ async def create_task(organization_id: str, token: str, assignment_id: str, task
     return JSONResponse(content=None, status_code=401)
 
 @router.post('/teacher/add-file')
-async def add_file_to_task(organization_id: str, token: str, task_id, file: UploadFile = File(...)):
+async def add_file_to_task(organization_id: str, token: str, task_id: str, file: UploadFile = File(...)):
      service = TaskService()
      if await service.add_question_file(token, task_id, file):
           return JSONResponse(content=None, status_code=201)
+     return JSONResponse(content=None, status_code=401)
+
+@router.delete('/teacher')
+async def delete_task(organization_id: str, token: str, task_id: str):
+     service = TaskService()
+     if service.delete_task(token, task_id):
+          return JSONResponse(content=None, status_code=200)
      return JSONResponse(content=None, status_code=401)

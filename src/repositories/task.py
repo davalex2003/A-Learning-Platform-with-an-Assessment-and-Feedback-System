@@ -34,3 +34,18 @@ class TaskRepository:
             cursor.execute(task_queries.UPDATE_TASK_QUESTION_FILE, (question_file, task_id))
         conn.commit()
         conn.close()
+
+    def get_question_info(self, task_id: str):
+        conn = self.connect_postgres()
+        with conn.cursor() as cursor:
+            cursor.execute(task_queries.SELECT_QUESTION_INFO, (task_id,))
+            data = cursor.fetchone()
+        conn.close()
+        return data
+    
+    def delete_task(self, task_id: str):
+        conn = self.connect_postgres()
+        with conn.cursor() as cursor:
+            cursor.execute(task_queries.DELETE_TASK, (task_id,))
+        conn.commit()
+        conn.close()
