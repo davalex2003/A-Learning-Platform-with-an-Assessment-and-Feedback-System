@@ -19,16 +19,13 @@ paths:
                     application/json:
                         schema:
                             $ref: '#/components/schemas/TaskModel'
-                    multipart/form-data:
-                        schema:
-                            type: object
-                            properties:
-                                question_file:
-                                    type: string
-                                    format: binary
             responses:
                 201:
                     description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/TaskCreateResponse201'
                 400:
                     description: Bad Request
                 401:
@@ -43,6 +40,33 @@ paths:
               - $ref: '#/components/parameters/TaskID'
             responses:
                 200:
+                    description: OK
+                401:
+                    description: Unauthorized
+                404:
+                    description: Организация не найдена
+
+    /task/teacher/add-file:
+        post:
+            description: Добавление файла к таске
+            parameters:
+              - $ref: '#/components/parameters/OrganizationID'
+              - $ref: '#/components/parameters/Token'
+              - $ref: '#/components/parameters/TaskID'
+            requestBody:
+                required: true
+                content:
+                    multipart/form-data:
+                        schema:
+                            type: object
+                            required:
+                                - file
+                            properties:
+                                file:
+                                    type: string
+                                    format: binary
+            responses:
+                201:
                     description: OK
                 401:
                     description: Unauthorized
@@ -112,3 +136,11 @@ components:
                     items:
                         $ref: '#/components/schemas/NotEmptyString'
                     minItems: 1
+
+        TaskCreateResponse201:
+            type: object
+            required:
+              - task_id
+            properties:
+                task_id:
+                    $ref: '#/components/schemas/NotEmptyString'

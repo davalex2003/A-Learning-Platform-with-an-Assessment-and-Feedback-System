@@ -21,9 +21,16 @@ class TaskRepository:
             return
         return conn
 
-    def create_task(self, task: TaskModel, question_file: Optional[str], assignment_id: str):
+    def create_task(self, task: TaskModel, assignment_id: str):
         conn = self.connect_postgres()
         with conn.cursor() as cursor:
-            cursor.execute(task_queries.CREATE_TASK, (assignment_id, task.question_type, task.question_text, question_file, task.answer_type, task.answer_variants))
+            cursor.execute(task_queries.CREATE_TASK, (assignment_id, task.question_type, task.question_text, task.answer_type, json.dumps(task.answer_variants)))
+        conn.commit()
+        conn.close()
+
+    def add_question_file(self, question_file: str, task_id: str):
+        conn = self.connect_postgres()
+        with conn.cursor() as cursor:
+            cursor.execute(task_queries.UPDATE_TASK_QUESTION_FILE, (question_file, task_id))
         conn.commit()
         conn.close()

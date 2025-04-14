@@ -1,1 +1,2 @@
-CREATE_TASK = 'INSERT INTO "task" (assignment_id, question_type, question_text, question_file, answer_type, answer_variants) VALUES (%s, %s, %s, %s, %s, %s)'
+CREATE_TASK = 'INSERT INTO "task" (assignment_id, question_type, question_text, answer_type, answer_variants) VALUES (%s, %s, %s, %s, %s)'
+UPDATE_TASK_QUESTION_FILE = 'UPDATE "task" SET question_file = %s WHERE id = %s'
