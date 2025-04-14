@@ -1,7 +1,7 @@
 from fastapi import APIRouter, UploadFile, File
 from starlette.responses import JSONResponse
 
-from schemas.task import TaskModel
+from schemas.task import TaskModel, TaskCreateResponse201
 from services.task import TaskService
 
 router = APIRouter(prefix='/task', tags=['task'])
@@ -10,8 +10,9 @@ router = APIRouter(prefix='/task', tags=['task'])
 @router.post('/teacher')
 async def create_task(organization_id: str, token: str, assignment_id: str, task: TaskModel):
     service = TaskService()
-    if service.create_task(task, token, assignment_id):
-         return JSONResponse(content=None, status_code=201)
+    task_id = service.create_task(task, token, assignment_id)
+    if task_id:
+         return TaskCreateResponse201(task_id=task_id)
     return JSONResponse(content=None, status_code=401)
 
 @router.post('/teacher/add-file')
@@ -27,3 +28,11 @@ async def delete_task(organization_id: str, token: str, task_id: str):
      if service.delete_task(token, task_id):
           return JSONResponse(content=None, status_code=200)
      return JSONResponse(content=None, status_code=401)
+
+@router.get('/list')
+async def get_tasks_list(organization_id: str, token: str, assignment_id: str):
+     service = TaskService()
+     tasks = service.get_tasks(token, assignment_id)
+     if tasks is None:
+          return JSONResponse(content=None, status_code=401)
+     return tasks

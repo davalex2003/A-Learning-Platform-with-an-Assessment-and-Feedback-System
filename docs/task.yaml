@@ -75,6 +75,25 @@ paths:
                 404:
                     description: Организация не найдена
 
+    /task/list:
+        get:
+            description: Получить список тасок в задании
+            parameters:
+              - $ref: '#/components/parameters/OrganizationID'
+              - $ref: '#/components/parameters/Token'
+              - $ref: '#/components/parameters/AssignmentID'
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/TaskListResponse200'
+                401:
+                    description: Unauthorized
+                404:
+                    description: Организация или задание не найдены
+
 components:
     parameters:
         OrganizationID:
@@ -146,3 +165,38 @@ components:
             properties:
                 task_id:
                     $ref: '#/components/schemas/NotEmptyString'
+
+        Task:
+            type: object
+            required:
+              - id
+              - question_type
+              - answer_type
+            properties:
+                id:
+                    $ref: '#/components/schemas/NotEmptyString'
+                question_type:
+                    type: string
+                    enum:
+                      - text
+                      - file
+                question_text:
+                    $ref: '#/components/schemas/NotEmptyString'
+                question_file:
+                    $ref: '#/components/schemas/NotEmptyString'
+                answer_type:
+                    type: string
+                    enum:
+                      - text
+                      - file
+                      - variants
+                answer_variants:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/NotEmptyString'
+                    minItems: 1
+
+        TaskListResponse200:
+            type: array
+            items:
+                $ref: '#/components/schemas/Task'
