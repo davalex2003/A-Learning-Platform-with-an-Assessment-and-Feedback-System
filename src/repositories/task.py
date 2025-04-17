@@ -59,3 +59,11 @@ class TaskRepository:
             tasks = cursor.fetchall()
         conn.close()
         return tasks
+
+    def get_question_file(self, task_id: str):
+        conn = self.connect_postgres()
+        with conn.cursor() as cursor:
+            cursor.execute(task_queries.SELECT_QUESTION_FILE, (task_id,))
+            question_file = cursor.fetchone()
+        conn.close()
+        return question_file

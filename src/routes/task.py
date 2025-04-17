@@ -1,5 +1,5 @@
 from fastapi import APIRouter, UploadFile, File
-from starlette.responses import JSONResponse
+from starlette.responses import JSONResponse, FileResponse
 
 from schemas.task import TaskModel, TaskCreateResponse201
 from services.task import TaskService
@@ -36,3 +36,14 @@ async def get_tasks_list(organization_id: str, token: str, assignment_id: str):
      if tasks is None:
           return JSONResponse(content=None, status_code=401)
      return tasks
+
+@router.get('/question/file')
+async def get_question_file(organization_id: str, token: str, task_id: str):
+     service = TaskService()
+     question_file = service.get_question_file(token, task_id)
+     if question_file == False:
+          return JSONResponse(content=None, status_code=401)
+     elif question_file is None:
+          return JSONResponse(content=None, status_code=404)
+     else:
+          return FileResponse(path=question_file[0], media_type='application/octet-stream', filename=question_file[0])

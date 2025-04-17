@@ -80,3 +80,15 @@ class TaskService():
             response.append(Task(id=str(i[0]), question_type=i[1], question_text=i[2], question_file=i[3], answer_type=i[4],
                                  answer_variants=i[5]))
         return response
+
+    def get_question_file(self, token: str, task_id: str):
+        user_data = decode_data(token)
+        if not user_data:
+            return False
+        data = self.user_repository.get_user_info(user_data['email'], get_hash_string(user_data['password']))
+        if len(data) != 1:
+            return False
+        if data[0][0] not in [STUDENT, TEACHER] or not data[0][5]:
+            return False
+        return self.task_repository.get_question_file(task_id)
+        
