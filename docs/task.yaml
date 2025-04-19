@@ -114,6 +114,60 @@ paths:
                 404:
                     description: Организация не найдена
 
+    /task/student/answer/text:
+        post:
+            description: Ответ на таску текстом
+            parameters:
+              - $ref: '#/components/parameters/OrganizationID'
+              - $ref: '#/components/parameters/Token'
+              - $ref: '#/components/parameters/AssignmentID'
+              - $ref: '#/components/parameters/TaskID'
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/NotEmptyString'
+            responses:
+                200:
+                    description: OK
+                400:
+                    description: Bad Request
+                401:
+                    description: Unauthorized
+                404:
+                    description: Организация не найдена
+
+    /task/student/answer/file:
+        post:
+            description: Ответ на таску файлом
+            parameters:
+              - $ref: '#/components/parameters/OrganizationID'
+              - $ref: '#/components/parameters/Token'
+              - $ref: '#/components/parameters/AssignmentID'
+              - $ref: '#/components/parameters/TaskID'
+            requestBody:
+                required: true
+                content:
+                    multipart/form-data:
+                        schema:
+                            type: object
+                            required:
+                                - file
+                            properties:
+                                file:
+                                    type: string
+                                    format: binary
+            responses:
+                200:
+                    description: OK
+                400:
+                    description: Bad Request
+                401:
+                    description: Unauthorized
+                404:
+                    description: Организация не найдена
+
 components:
     parameters:
         OrganizationID:

@@ -50,7 +50,7 @@ CREATE TABLE "answer" (
   "assignment_id" int NOT NULL,
   "text" varchar,
   "file" varchar,
-  "is_active" bool NOT NULL DEFAULT false,
+  "is_finished" bool NOT NULL DEFAULT false,
   "assessment" int,
   "feedback" varchar
 );
