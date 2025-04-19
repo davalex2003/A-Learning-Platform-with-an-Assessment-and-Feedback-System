@@ -19,9 +19,16 @@ class AnswerRepository:
             return
         return conn
 
-    def insert_answer(self, task_id: str, user_id: str, assignment_id: str, text: str):
+    def insert_answer_text(self, task_id: str, user_id: str, assignment_id: str, text: str):
         conn = self.connect_postgres()
         with conn.cursor() as cursor:
             cursor.execute(answer_queries.INSERT_ANSWER_TEXT, (task_id, user_id, assignment_id, text))
+        conn.commit()
+        conn.close()
+
+    def insert_answer_file(self, task_id: str, user_id: str, assignment_id: str, file: str):
+        conn = self.connect_postgres()
+        with conn.cursor() as cursor:
+            cursor.execute(answer_queries.INSERT_ANSWER_FILE, (task_id, user_id, assignment_id, file))
         conn.commit()
         conn.close()

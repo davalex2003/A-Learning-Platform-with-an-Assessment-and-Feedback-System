@@ -53,6 +53,13 @@ async def get_question_file(organization_id: str, token: str, task_id: str):
 @router.post('/student/answer/text')
 async def insert_answer_text(organization_id: str, token: str, assignment_id: str, task_id: str, request: AnswerTextPostRequest):
      service = AnswerService()
-     if service.insert_answer(token, assignment_id, task_id, request.text):
+     if service.insert_answer_text(token, assignment_id, task_id, request.text):
+          return JSONResponse(content=None, status_code=201)
+     return JSONResponse(content=None, status_code=401)
+
+@router.post('/student/answer/file')
+async def insert_answer_text(organization_id: str, token: str, assignment_id: str, task_id: str, file: UploadFile = File(...)):
+     service = AnswerService()
+     if await service.insert_answer_file(token, assignment_id, task_id, file):
           return JSONResponse(content=None, status_code=201)
      return JSONResponse(content=None, status_code=401)
