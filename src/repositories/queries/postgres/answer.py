@@ -1,0 +1,1 @@
+INSERT_ANSWER_TEXT = 'INSERT INTO "answer" (task_id, user_id, assignment_id, text) VALUES (%s, %s, %s, %s)'

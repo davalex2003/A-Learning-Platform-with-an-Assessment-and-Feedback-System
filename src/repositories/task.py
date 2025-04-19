@@ -1,7 +1,6 @@
 import json
 import logging
 import psycopg2
-from typing import Optional
 
 import repositories.queries.postgres.task as task_queries
 from schemas.task import TaskModel

@@ -127,9 +127,9 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/NotEmptyString'
+                            $ref: '#/components/schemas/AnswerTextPostRequest'
             responses:
-                200:
+                201:
                     description: OK
                 400:
                     description: Bad Request
@@ -274,3 +274,11 @@ components:
             type: array
             items:
                 $ref: '#/components/schemas/Task'
+
+        AnswerTextPostRequest:
+            type: object
+            required:
+              - text
+            properties:
+                text:
+                    $ref: '#/components/schemas/NotEmptyString'
