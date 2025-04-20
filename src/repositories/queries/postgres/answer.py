@@ -1,3 +1,4 @@
 INSERT_ANSWER_TEXT = 'INSERT INTO "answer" (task_id, user_id, assignment_id, text) VALUES (%s, %s, %s, %s)'
 INSERT_ANSWER_FILE = 'INSERT INTO "answer" (task_id, user_id, assignment_id, file) VALUES (%s, %s, %s, %s)'
 GET_ANSWER_FILE = 'SELECT file from "answer" WHERE task_id = %s AND user_id = %s AND assignment_id = %s'
+INSERT_ANSWER_ASSESSMENT = 'UPDATE "answer" SET assessment = %s WHERE task_id = %s AND user_id = %s AND assignment_id = %s'

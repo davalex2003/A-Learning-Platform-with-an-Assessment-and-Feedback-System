@@ -1,7 +1,7 @@
 from fastapi import APIRouter, UploadFile, File
 from starlette.responses import JSONResponse, FileResponse
 
-from schemas.answer import AnswerTextPostRequest
+from schemas.answer import AnswerTextPostRequest, TaskEvaluateRequest
 from schemas.task import TaskModel, TaskCreateResponse201
 from services.answer import AnswerService
 from services.task import TaskService
@@ -68,10 +68,16 @@ async def insert_answer_text(organization_id: str, token: str, assignment_id: st
 async def get_answer_file(organization_id: str, token: str, assignment_id: str, task_id: str, user_id: str):
      service = AnswerService()
      answer_file = service.get_answer_file(token, assignment_id, task_id, user_id)
-     print(answer_file)
      if answer_file == False:
           return JSONResponse(content=None, status_code=401)
      elif answer_file is None or len(answer_file) == 0 or answer_file[0] is None:
           return JSONResponse(content=None, status_code=404)
      else:
           return FileResponse(path=answer_file[0], media_type='application/octet-stream', filename=answer_file[0])
+
+@router.post('/teacher/evaluate')
+async def evaluate(organization_id: str, token: str, assignment_id: str, task_id: str, user_id: str, request: TaskEvaluateRequest):
+     service = AnswerService()
+     if service.insert_answer_assessment(token, assignment_id, task_id, user_id, request.assessment):
+          return JSONResponse(content=None, status_code=200)
+     return JSONResponse(content=None, status_code=401)

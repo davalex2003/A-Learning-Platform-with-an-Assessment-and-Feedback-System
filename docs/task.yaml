@@ -168,6 +168,29 @@ paths:
                 404:
                     description: Организация не найдена
 
+    /task/teacher/evaluate:
+        post:
+            description: Оценить таску
+            parameters:
+              - $ref: '#/components/parameters/OrganizationID'
+              - $ref: '#/components/parameters/Token'
+              - $ref: '#/components/parameters/AssignmentID'
+              - $ref: '#/components/parameters/TaskID'
+              - $ref: '#/components/parameters/UserID'
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/TaskEvaluateRequest'
+            responses:
+                200:
+                    description: OK
+                401:
+                    description: Unauthorized
+                404:
+                    description: Организация не найдена
+
 components:
     parameters:
         OrganizationID:
@@ -198,6 +221,14 @@ components:
             in: query
             type: object
             name: assignment_id
+            required: true
+            schema:
+                $ref: '#/components/schemas/NotEmptyString'
+
+        UserID:
+            in: query
+            type: object
+            name: user_id
             required: true
             schema:
                 $ref: '#/components/schemas/NotEmptyString'
@@ -282,3 +313,11 @@ components:
             properties:
                 text:
                     $ref: '#/components/schemas/NotEmptyString'
+
+        TaskEvaluateRequest:
+            type: object
+            required:
+              - assessment
+            properties:
+                assessment:
+                    type: int
