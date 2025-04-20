@@ -89,3 +89,11 @@ async def get_student_courses_list(organization_id: str, token: str, search_quer
     if courses is None:
         return JSONResponse(content=None, status_code=401)
     return courses
+
+@router.get('/teacher/student-list')
+async def get_course_students_list(organization_id: str, token: str, course_id: str):
+    service = CourseService()
+    students = service.get_course_users_list(token, course_id)
+    if students is None:
+        return JSONResponse(content=None, status_code=401)
+    return students

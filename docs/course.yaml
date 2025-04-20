@@ -80,6 +80,25 @@ paths:
                     description: Unauthorized
                 404:
                     description: Организация не найдена
+    
+    /course/teacher/student-list:
+        get:
+            description: Получение списка учеников на курсе
+            parameters:
+              - $ref: '#/components/parameters/OrganizationID'
+              - $ref: '#/components/parameters/Token'
+              - $ref: '#/components/parameters/CourseID'
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CourseTeacherStudentList'
+                401:
+                    description: Unauthorized
+                404:
+                    description: Организация не найдена
 
     /course/additions:
         get:
@@ -351,3 +370,39 @@ components:
             properties:
                 link:
                     $ref: '#/components/schemas/NotEmptyString'
+
+        FullName:
+            type: object
+            required:
+              - first_name
+              - second_name
+            properties:
+                first_name:
+                    description: Имя
+                    $ref: '#/components/schemas/NotEmptyString'
+                second_name:
+                    description: Фамилия
+                    $ref: '#/components/schemas/NotEmptyString'
+                middle_name:
+                    description: Отчество
+                    $ref: '#/components/schemas/NotEmptyString'
+
+        User:
+            type: object
+            required:
+              - id
+              - full_name
+              - email
+            properties:
+                id:
+                    $ref: '#/components/schemas/NotEmptyString'
+                full_name:
+                    $ref: '#/components/schemas/FullName'
+                email:
+                    $ref: '#/components/schemas/NotEmptyString'
+
+        CourseTeacherStudentList:
+            type: array
+            items:
+                $ref: '#/components/schemas/User'
+            minItems: 0

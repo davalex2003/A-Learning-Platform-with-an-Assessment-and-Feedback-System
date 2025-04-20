@@ -104,3 +104,11 @@ class CourseRepository:
             data = cursor.fetchall()
         conn.close()
         return data
+
+    def get_course_users_list(self, course_id: str):
+        conn = self.connect_postgres()
+        with conn.cursor() as cursor:
+            cursor.execute(course_queries.SELECT_USERS_ON_COURSE, (course_id,))
+            data = cursor.fetchall()
+        conn.close()
+        return data
