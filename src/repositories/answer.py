@@ -47,3 +47,10 @@ class AnswerRepository:
             cursor.execute(answer_queries.INSERT_ANSWER_ASSESSMENT, (assessment, task_id, user_id, assignment_id))
         conn.commit()
         conn.close()
+    
+    def insert_answer_feedback(self, task_id: str, user_id: str, assignment_id: str, feedback: str):
+        conn = self.connect_postgres()
+        with conn.cursor() as cursor:
+            cursor.execute(answer_queries.INSERT_ANSWER_FEEDBACK, (feedback, task_id, user_id, assignment_id))
+        conn.commit()
+        conn.close()

@@ -62,3 +62,16 @@ class AnswerService():
             return False
         self.answer_repository.insert_answer_assessment(task_id, user_id, assignment_id, assessment)
         return True
+
+    def insert_answer_feedback(self, token: str, assignment_id: str, task_id: str, user_id: str, feedback: str):
+        user_data = decode_data(token)
+        if not user_data:
+            return False
+        data = self.user_repository.get_user_info(user_data['email'], get_hash_string(user_data['password']))
+        print(data)
+        if len(data) != 1:
+            return False
+        if data[0][0] != TEACHER or not data[0][5]:
+            return False
+        self.answer_repository.insert_answer_feedback(task_id, user_id, assignment_id, feedback)
+        return True  

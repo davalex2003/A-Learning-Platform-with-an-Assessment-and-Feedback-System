@@ -191,6 +191,29 @@ paths:
                 404:
                     description: Организация не найдена
 
+    /task/teacher/feedback:
+        post:
+            description: Оценить таску
+            parameters:
+              - $ref: '#/components/parameters/OrganizationID'
+              - $ref: '#/components/parameters/Token'
+              - $ref: '#/components/parameters/AssignmentID'
+              - $ref: '#/components/parameters/TaskID'
+              - $ref: '#/components/parameters/UserID'
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/TaskFeedbackRequest'
+            responses:
+                200:
+                    description: OK
+                401:
+                    description: Unauthorized
+                404:
+                    description: Организация не найдена
+
 components:
     parameters:
         OrganizationID:
@@ -321,3 +344,11 @@ components:
             properties:
                 assessment:
                     type: int
+
+        TaskFeedbackRequest:
+            type: object
+            required:
+              - feedback
+            properties:
+                assessment:
+                    $ref: '#/components/schemas/NotEmptyString'

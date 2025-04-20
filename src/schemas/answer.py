@@ -5,3 +5,6 @@ class AnswerTextPostRequest(BaseModel):
 
 class TaskEvaluateRequest(BaseModel):
     assessment: int
+
+class TaskFeedbackRequest(BaseModel):
+    feedback: str
