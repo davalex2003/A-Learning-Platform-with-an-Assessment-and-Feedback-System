@@ -63,3 +63,15 @@ async def insert_answer_text(organization_id: str, token: str, assignment_id: st
      if await service.insert_answer_file(token, assignment_id, task_id, file):
           return JSONResponse(content=None, status_code=201)
      return JSONResponse(content=None, status_code=401)
+
+@router.get('/answer/file')
+async def get_answer_file(organization_id: str, token: str, assignment_id: str, task_id: str, user_id: str):
+     service = AnswerService()
+     answer_file = service.get_answer_file(token, assignment_id, task_id, user_id)
+     print(answer_file)
+     if answer_file == False:
+          return JSONResponse(content=None, status_code=401)
+     elif answer_file is None or len(answer_file) == 0 or answer_file[0] is None:
+          return JSONResponse(content=None, status_code=404)
+     else:
+          return FileResponse(path=answer_file[0], media_type='application/octet-stream', filename=answer_file[0])

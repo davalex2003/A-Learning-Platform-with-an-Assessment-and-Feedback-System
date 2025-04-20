@@ -32,3 +32,11 @@ class AnswerRepository:
             cursor.execute(answer_queries.INSERT_ANSWER_FILE, (task_id, user_id, assignment_id, file))
         conn.commit()
         conn.close()
+
+    def get_answer_file(self, task_id: str, user_id: str, assignment_id: str):
+        conn = self.connect_postgres()
+        with conn.cursor() as cursor:
+            cursor.execute(answer_queries.GET_ANSWER_FILE, (task_id, user_id, assignment_id))
+            file = cursor.fetchone()
+        conn.close()
+        return file

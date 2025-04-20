@@ -38,3 +38,14 @@ class AnswerService():
             f.write(content)
         self.answer_repository.insert_answer_file(task_id, data[0][6], assignment_id, file.filename)
         return True
+
+    def get_answer_file(self, token: str, assignment_id: str, task_id: str, user_id: str):
+        user_data = decode_data(token)
+        if not user_data:
+            return False
+        data = self.user_repository.get_user_info(user_data['email'], get_hash_string(user_data['password']))
+        if len(data) != 1:
+            return False
+        if data[0][0] not in [STUDENT, TEACHER] or not data[0][5]:
+            return False
+        return self.answer_repository.get_answer_file(task_id, user_id, assignment_id)
