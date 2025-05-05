@@ -82,6 +82,24 @@ paths:
                 404:
                     description: Организация не найдена
 
+    /assignment/courses:
+        get:
+            description: Получение списка заданий на курсах
+            parameters:
+              - $ref: '#/components/parameters/OrganizationID'
+              - $ref: '#/components/parameters/Token'
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/AssignmentCoursesResponse200'
+                401:
+                    description: Unauthorized
+                404:
+                    description: Организация не найдена
+
 components:
     parameters:
         OrganizationID:
@@ -162,3 +180,25 @@ components:
             type: array
             items:
                 $ref: '#/components/schemas/Assignment'
+
+        AssignmentCourse:
+            type: object
+            required:
+              - course_id
+              - course_name
+              - assignments
+            properties:
+                course_id:
+                    $ref: '#/components/schemas/NotEmptyString'
+                course_name:
+                    $ref: '#/components/schemas/NotEmptyString'
+                assignments:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Assignment'
+                    minItems: 1
+
+        AssignmentCoursesResponse200:
+            type: array
+            items:
+                $ref: '#/components/schemas/AssignmentCourse'
