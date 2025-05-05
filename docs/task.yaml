@@ -193,7 +193,7 @@ paths:
 
     /task/teacher/feedback:
         post:
-            description: Оценить таску
+            description: Обратная связь к таске
             parameters:
               - $ref: '#/components/parameters/OrganizationID'
               - $ref: '#/components/parameters/Token'

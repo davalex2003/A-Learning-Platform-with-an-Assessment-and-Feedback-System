@@ -237,6 +237,25 @@ paths:
                 404:
                     description: Организация не найдена
 
+    /course/assignments/answers:
+        get:
+            description: Получение списка выполненных заданий на курсе
+            parameters:
+              - $ref: '#/components/parameters/OrganizationID'
+              - $ref: '#/components/parameters/Token'
+              - $ref: '#/components/parameters/CourseID'
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/AssignmentsAnswersResponse200'
+                401:
+                    description: Unauthorized
+                404:
+                    description: Организация не найдена
+
 components:
     parameters:
         OrganizationID:
@@ -402,6 +421,39 @@ components:
                     $ref: '#/components/schemas/NotEmptyString'
 
         CourseTeacherStudentList:
+            type: array
+            items:
+                $ref: '#/components/schemas/User'
+            minItems: 0
+
+        StudentAnswer:
+            type: object
+            required:
+              - full_name
+              - is_evaluated
+            properties:
+                full_name:
+                    $ref: '#/components/schemas/FullName'
+                is_evaluated:
+                    type: bool
+
+        AssignmentAnswers:
+            type: object
+            required:
+              - assignment_id
+              - assignment_name
+            properties:
+                assignment_id:
+                    $ref: '#/components/schemas/NotEmptyString'
+                assignment_name:
+                    $ref: '#/components/schemas/NotEmptyString'
+                answers:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/StudentAnswer'
+                    minItems: 1
+
+        AssignmentsAnswersResponse200:
             type: array
             items:
                 $ref: '#/components/schemas/User'
