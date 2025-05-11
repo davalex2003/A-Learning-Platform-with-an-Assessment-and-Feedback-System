@@ -214,7 +214,7 @@ paths:
                 404:
                     description: Организация не найдена
 
-    /task/teacher/answer/file:
+    /task/answer/file:
         get:
             description: Обратная связь к таске
             parameters:
