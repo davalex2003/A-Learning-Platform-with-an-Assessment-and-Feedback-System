@@ -54,3 +54,11 @@ class AnswerRepository:
             cursor.execute(answer_queries.INSERT_ANSWER_FEEDBACK, (feedback, task_id, user_id, assignment_id))
         conn.commit()
         conn.close()
+
+    def get_answers(self, user_id: str, assignment_id: str):
+        conn = self.connect_postgres()
+        with conn.cursor() as cursor:
+            cursor.execute(answer_queries.SELECT_ANSWERS, (user_id, assignment_id))
+            data = cursor.fetchall()
+        conn.close()
+        return data

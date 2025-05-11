@@ -30,9 +30,17 @@ async def delete_assignment(organization_id: str, token: str, assignment_id: str
     return JSONResponse(content=None, status_code=401)
 
 @router.get('/list')
-async def get_assignments(organization_id: str, token: str, course_id: str):
+async def get_assignment_list(organization_id: str, token: str, course_id: str):
     service = AssignmentService()
     assignments = service.get_assignments(course_id, token)
+    if assignments is None:
+        return JSONResponse(content=None, status_code=401)
+    return assignments
+
+@router.get('/courses')
+async def get_assignment_courses(organization_id: str, token: str):
+    service = AssignmentService()
+    assignments = service.get_homeworks(token)
     if assignments is None:
         return JSONResponse(content=None, status_code=401)
     return assignments

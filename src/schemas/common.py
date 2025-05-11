@@ -10,9 +10,3 @@ class Course(BaseModel):
     name: str = Field(min_length=1)
     description: str = Field(min_length=1)
     is_active: bool
-
-class Assignment(BaseModel):
-    id: str = Field(min_length=1)
-    name: str = Field(min_length=1)
-    started_at: datetime
-    ended_at: Optional[datetime] = Field(None)

@@ -220,7 +220,6 @@ components:
               - id
               - name
               - started_at
-              - status
             properties:
                 id:
                     $ref: '#/components/schemas/NotEmptyString'
