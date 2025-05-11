@@ -181,7 +181,7 @@ class CourseService():
             self.course_repository.update_course_materials(course_id, materials)
         return True
 
-    def add_user_course_link(self, token: str, course_id: str):
+    def add_user_course_link(self, token: str, course_id: str) -> bool:
         user_data = decode_data(token)
         if not user_data:
             return False
@@ -191,6 +191,18 @@ class CourseService():
         if data[0][0] != STUDENT or not data[0][5]:
             return False
         self.course_repository.add_course_user_link(data[0][6], course_id)
+        return True
+
+    def delete_user_course_link(self, token: str, course_id: str) -> bool:
+        user_data = decode_data(token)
+        if not user_data:
+            return False
+        data = self.user_repository.get_user_info(user_data['email'], get_hash_string(user_data['password']))
+        if len(data) != 1:
+            return False
+        if data[0][0] != STUDENT or not data[0][5]:
+            return False
+        self.course_repository.delete_course_user_link(data[0][6], course_id)
         return True
     
     def get_courses_student_list(self, token: str, search_query: Optional[str] = None) -> Optional[List[Course]]:

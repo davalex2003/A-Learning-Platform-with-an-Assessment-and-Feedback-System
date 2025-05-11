@@ -82,6 +82,13 @@ async def add_student_to_course(organization_id: str, token: str, course_id: str
         return JSONResponse(content=None, status_code=201)
     return JSONResponse(content=None, status_code=401)
 
+@router.post('/student/leave')
+async def remove_student_from_course(organization_id: str, token: str, course_id: str):
+    service = CourseService()
+    if service.delete_user_course_link(token, course_id):
+        return JSONResponse(content=None, status_code=200)
+    return JSONResponse(content=None, status_code=401)
+
 @router.get('/student/list')
 async def get_student_courses_list(organization_id: str, token: str, search_query: Optional[str] = None):
     service = CourseService()
