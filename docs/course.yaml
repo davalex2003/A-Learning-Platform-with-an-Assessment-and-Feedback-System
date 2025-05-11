@@ -456,5 +456,5 @@ components:
         AssignmentsAnswersResponse200:
             type: array
             items:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/AssignmentAnswers'
             minItems: 0
