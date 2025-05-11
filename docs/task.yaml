@@ -350,5 +350,5 @@ components:
             required:
               - feedback
             properties:
-                assessment:
+                feedback:
                     $ref: '#/components/schemas/NotEmptyString'

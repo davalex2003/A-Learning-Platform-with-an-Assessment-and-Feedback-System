@@ -100,6 +100,45 @@ paths:
                 404:
                     description: Организация не найдена
 
+    /assignment/student/info:
+        get:
+            description: Получение информации о задании для студента
+            parameters:
+              - $ref: '#/components/parameters/OrganizationID'
+              - $ref: '#/components/parameters/Token'
+              - $ref: '#/components/parameters/AssignmentID'
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/AssignmentInfoResponse200'
+                401:
+                    description: Unauthorized
+                404:
+                    description: Организация не найдена
+
+    /assignment/teacher/info:
+        get:
+            description: Получение информации о задании для студента
+            parameters:
+              - $ref: '#/components/parameters/OrganizationID'
+              - $ref: '#/components/parameters/Token'
+              - $ref: '#/components/parameters/AssignmentID'
+              - $ref: '#/components/parameters/UserID'
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/AssignmentInfoResponse200'
+                401:
+                    description: Unauthorized
+                404:
+                    description: Организация не найдена
+
 components:
     parameters:
         OrganizationID:
@@ -130,6 +169,14 @@ components:
             in: query
             type: object
             name: assignment_id
+            required: true
+            schema:
+                $ref: '#/components/schemas/NotEmptyString'
+
+        UserID:
+            in: query
+            type: object
+            name: user_id
             required: true
             schema:
                 $ref: '#/components/schemas/NotEmptyString'
@@ -212,3 +259,51 @@ components:
             type: array
             items:
                 $ref: '#/components/schemas/AssignmentCourse'
+
+        TaskInfo:
+            type: object
+            required:
+              - id
+              - question_type
+              - answer_type
+            properties:
+                id:
+                    $ref: '#/components/schemas/NotEmptyString'
+                question_type:
+                    type: string
+                    enum:
+                      - text
+                      - file
+                question_text:
+                    $ref: '#/components/schemas/NotEmptyString'
+                question_file:
+                    $ref: '#/components/schemas/NotEmptyString'
+                answer_type:
+                    type: string
+                    enum:
+                      - text
+                      - file
+                      - variants
+                answer_variants:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/NotEmptyString'
+                    minItems: 1
+                answer_text:
+                    $ref: '#/components/schemas/NotEmptyString'
+                answer_file:
+                    $ref: '#/components/schemas/NotEmptyString'
+                assessment:
+                    type: int
+                feedback:
+                    $ref: '#/components/schemas/NotEmptyString'
+
+        AssignmentInfoResponse200:
+            type: object
+            required:
+              - tasks_info
+            properties:
+                tasks_info:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/TaskInfo'
