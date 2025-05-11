@@ -217,6 +217,21 @@ paths:
                     description: Unauthorized
                 404:
                     description: Организация или курс не найдены
+
+    /course/student/leave:
+        post:
+            description: Удаление студента из курса
+            parameters:
+              - $ref: '#/components/parameters/OrganizationID'
+              - $ref: '#/components/parameters/Token'
+              - $ref: '#/components/parameters/CourseID'
+            responses:
+                200:
+                    description: OK
+                401:
+                    description: Unauthorized
+                404:
+                    description: Организация или курс не найдены
     
     /course/student/list:
         get:
