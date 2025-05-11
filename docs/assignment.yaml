@@ -139,6 +139,13 @@ components:
             type: string
             minLength: 1
 
+        AssignmentStatus:
+            type: string
+            enum:
+              - pending
+              - in_review
+              - graded
+
         AssignmentModel:
             type: object
             required:
@@ -166,6 +173,7 @@ components:
               - id
               - name
               - started_at
+              - status
             properties:
                 id:
                     $ref: '#/components/schemas/NotEmptyString'
@@ -175,7 +183,9 @@ components:
                     type: datetime
                 ended_at:
                     type: datetime
-
+                status:
+                    $ref: '#/components/schemas/AssignmentStatus'
+                    
         AssignmentListResponse200:
             type: array
             items:
