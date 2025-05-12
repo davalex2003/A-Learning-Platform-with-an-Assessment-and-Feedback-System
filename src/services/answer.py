@@ -101,3 +101,26 @@ class AnswerService():
                     tasks_info.append(TaskInfo(id=str(task[0]), question_type=task[1], question_text=task[2], question_file=task[3],
                                             answer_type=task[4], answer_variants=task[5]))
         return tasks_info
+
+    def get_answers_for_teacher(self, token: str, assignment_id: str, user_id: str):
+        user_data = decode_data(token)
+        if not user_data:
+            return None
+        data = self.user_repository.get_user_info(user_data['email'], get_hash_string(user_data['password']))
+        if len(data) != 1:
+            return None
+        if data[0][0] != TEACHER or not data[0][5]:
+            return None
+        tasks = self.task_repository.get_tasks(assignment_id)
+        tasks_info: List[TaskInfo] = []
+        if tasks:
+            for task in tasks:
+                answer = self.answer_repository.get_answer(user_id, task[0])
+                if answer:
+                    tasks_info.append(TaskInfo(id=str(task[0]), question_type=task[1], question_text=task[2], question_file=task[3],
+                                            answer_type=task[4], answer_variants=task[5], answer_text=answer[0],
+                                            answer_file=answer[1], assessment=answer[2], feedback=answer[3]))
+                else:
+                    tasks_info.append(TaskInfo(id=str(task[0]), question_type=task[1], question_text=task[2], question_file=task[3],
+                                            answer_type=task[4], answer_variants=task[5]))
+        return tasks_info

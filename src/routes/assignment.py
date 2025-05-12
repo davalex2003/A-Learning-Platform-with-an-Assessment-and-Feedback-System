@@ -53,3 +53,11 @@ async def get_student_info(organization_id: str, token: str, assignment_id: str)
     if tasks_info is None:
         return JSONResponse(content=None, status_code=401)
     return tasks_info
+
+@router.get('/teacher/info')
+async def get_teacher_info(organization_id: str, token: str, assignment_id: str, user_id: str):
+    service = AnswerService()
+    tasks_info = service.get_answers_for_teacher(token, assignment_id, user_id)
+    if tasks_info is None:
+        return JSONResponse(content=None, status_code=401)
+    return tasks_info
