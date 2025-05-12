@@ -86,3 +86,11 @@ class UserRepository:
             cursor.execute(user_queries.SET_CONFIRMED_EMAIL, (email, ))
         conn.commit()
         conn.close()
+
+    def get_user_by_id(self, user_id: str):
+        conn = self.connect_postgres()
+        with conn.cursor() as cursor:
+            cursor.execute(user_queries.SELECT_USER_BY_ID, (user_id, ))
+            user = cursor.fetchone()
+        conn.close()
+        return user

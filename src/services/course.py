@@ -1,10 +1,13 @@
+from datetime import datetime
 from os import remove
 from typing import Optional, List
 
+from repositories.answer import AnswerRepository
+from repositories.assignment import AssignmentRepository
 from repositories.course import CourseRepository
 from repositories.user import UserRepository
 from schemas.common import Course
-from schemas.course import CourseModel, CourseAdditionsResponse200, User, FullName
+from schemas.course import CourseModel, CourseAdditionsResponse200, User, FullName, AssignmentAnswers, StudentAnswer
 from utils.hash import get_hash_string
 from utils.jwt import decode_data
 
@@ -16,6 +19,8 @@ MATERIAL = 'material'
 
 class CourseService():
     def __init__(self):
+        self.answer_repository = AnswerRepository()
+        self.assignment_repository = AssignmentRepository()
         self.course_repository = CourseRepository()
         self.user_repository = UserRepository()
 
@@ -238,4 +243,38 @@ class CourseService():
         response: List[User] = []
         for i in data:
             response.append(User(id=str(i[0]), full_name=FullName(first_name=i[1], second_name=i[2], middle_name=i[3]), email=i[4]))
+        return response
+
+    def get_users_answers(self, token: str, course_id: str) -> Optional[List[AssignmentAnswers]]:
+        user_data = decode_data(token)
+        if not user_data:
+            return None
+        data = self.user_repository.get_user_info(user_data['email'], get_hash_string(user_data['password']))
+        if len(data) != 1:
+            return None
+        if data[0][0] != TEACHER or not data[0][5]:
+            return None
+        response: List[AssignmentAnswers] = []
+        assignments = self.assignment_repository.get_assignments(course_id)
+        if not assignments:
+            return response
+        for assignment in assignments:
+            assignment_answers = self.answer_repository.get_assignment_answers(assignment[0])
+            if not assignment_answers:
+                continue
+            student_answers: List[StudentAnswer] = []
+            evaluated_students = set()
+            not_evaluated_students = set()
+            for assignment_answer in assignment_answers:
+                if assignment_answer[1]:
+                    evaluated_students.add(assignment_answer[0])
+                else:
+                    not_evaluated_students.add(assignment_answer[0])
+            for student in not_evaluated_students:
+                student_info = self.user_repository.get_user_by_id(student)
+                student_answers.append(StudentAnswer(user_id=str(student), full_name=FullName(first_name=student_info[0], second_name=student_info[1], middle_name=student_info[2]), is_evaluated=False))
+            for student in evaluated_students:
+                student = self.user_repository.get_user_by_id(student)
+                student_answers.append(StudentAnswer(user_id=str(student), full_name=FullName(first_name=student_info[0], second_name=student_info[1], middle_name=student_info[2]), is_evaluated=True))
+            response.append(AssignmentAnswers(assignment_id=str(assignment[0]), assignment_name=assignment[1], answers=student_answers))
         return response

@@ -104,3 +104,11 @@ async def get_course_students_list(organization_id: str, token: str, course_id: 
     if students is None:
         return JSONResponse(content=None, status_code=401)
     return students
+
+@router.get('/assignments/answers')
+async def get_course_answers(organization_id: str, token: str, course_id: str):
+    service = CourseService()
+    answers = service.get_users_answers(token, course_id)
+    if answers is None:
+        return JSONResponse(content=None, status_code=401)
+    return answers

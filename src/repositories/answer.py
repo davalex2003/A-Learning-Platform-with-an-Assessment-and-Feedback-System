@@ -70,3 +70,11 @@ class AnswerRepository:
             data = cursor.fetchone()
         conn.close()
         return data
+
+    def get_assignment_answers(self, assignment_id: str):
+        conn = self.connect_postgres()
+        with conn.cursor() as cursor:
+            cursor.execute(answer_queries.SELECT_ANSWERS_BY_ASSIGNMENT, (assignment_id,))
+            data = cursor.fetchall()
+        conn.close()
+        return data

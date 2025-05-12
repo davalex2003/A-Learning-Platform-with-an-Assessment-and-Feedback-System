@@ -444,9 +444,12 @@ components:
         StudentAnswer:
             type: object
             required:
+              - user_id
               - full_name
               - is_evaluated
             properties:
+                user_id:
+                    $ref: '#/components/schemas/NotEmptyString'
                 full_name:
                     $ref: '#/components/schemas/FullName'
                 is_evaluated:

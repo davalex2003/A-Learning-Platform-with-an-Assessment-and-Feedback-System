@@ -1,6 +1,6 @@
 from enum import Enum
 from pydantic import BaseModel, Field
-from typing import Optional
+from typing import Optional, List
 
 class CourseModel(BaseModel):
     name: str = Field(min_length=1)
@@ -33,3 +33,13 @@ class User(BaseModel):
     id: str = Field(min_length=1)
     full_name: FullName
     email: str = Field(min_length=1)
+
+class StudentAnswer(BaseModel):
+    user_id: str = Field(min_length=1)
+    full_name: FullName
+    is_evaluated: bool
+
+class AssignmentAnswers(BaseModel):
+    assignment_id: str = Field(min_length=1)
+    assignment_name: str = Field(min_length=1)
+    answers: List[StudentAnswer]
