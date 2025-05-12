@@ -62,3 +62,11 @@ class AnswerRepository:
             data = cursor.fetchall()
         conn.close()
         return data
+
+    def get_answer(self, user_id: str, task_id: str):
+        conn = self.connect_postgres()
+        with conn.cursor() as cursor:
+            cursor.execute(answer_queries.SELECT_ANSWER, (task_id, user_id))
+            data = cursor.fetchone()
+        conn.close()
+        return data

@@ -2,6 +2,7 @@ from fastapi import APIRouter
 from starlette.responses import JSONResponse
 
 from schemas.assignment import AssignmentModel, AssignmentCreateResponse201
+from services.answer import AnswerService
 from services.assignment import AssignmentService
 
 router = APIRouter(prefix='/assignment', tags=['assignment'])
@@ -44,3 +45,11 @@ async def get_assignment_courses(organization_id: str, token: str):
     if assignments is None:
         return JSONResponse(content=None, status_code=401)
     return assignments
+
+@router.get('/student/info')
+async def get_student_info(organization_id: str, token: str, assignment_id: str):
+    service = AnswerService()
+    tasks_info = service.get_answers_for_student(token, assignment_id)
+    if tasks_info is None:
+        return JSONResponse(content=None, status_code=401)
+    return tasks_info
