@@ -3,3 +3,5 @@ CREATE_STUDENT = 'INSERT INTO "user" (email, hash_password, role, first_name, se
 GET_USER = 'SELECT role, first_name, second_name, middle_name, email, has_confirmed_email, id FROM "user" WHERE email = %s AND hash_password = %s'
 SET_CONFIRMED_EMAIL = 'UPDATE "user" SET has_confirmed_email = true WHERE email = %s'
 SELECT_USER_BY_ID = 'SELECT first_name, second_name, middle_name FROM "user" WHERE id = %s'
+UPDATE_FULL_NAME = 'UPDATE "user" SET first_name = %s, second_name = %s, middle_name = %s WHERE id = %s'
+UPDATE_PASSWORD = 'UPDATE "user" SET hash_password = %s WHERE id = %s'

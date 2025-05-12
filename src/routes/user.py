@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from starlette.responses import JSONResponse
 
-from schemas.user import UserRegisterRequest, UserRegisterResponse201, UserAuthorizeRequest, UserAuthorizeResponse200, UserEmailVerifyRequest
+from schemas.user import UserRegisterRequest, UserRegisterResponse201, UserAuthorizeRequest, UserAuthorizeResponse200, UserEmailVerifyRequest, UserInfoPutRequest
 from schemas.common import Response400
 from services.user import UserService
 
@@ -44,4 +44,11 @@ async def verify_email(organization_id: str, request: UserEmailVerifyRequest):
     if not service.verify_email(request.token, request.code):
         return Response400(code='invalid_code')
     service.confirm_email(request)
+    return JSONResponse(content=None, status_code=200)
+
+@router.put('/info')
+async def update_user_info(organization_id: str, token: str, request: UserInfoPutRequest):
+    service = UserService()
+    if not service.update_user_info(request, token):
+        return JSONResponse(content=None, status_code=404)
     return JSONResponse(content=None, status_code=200)

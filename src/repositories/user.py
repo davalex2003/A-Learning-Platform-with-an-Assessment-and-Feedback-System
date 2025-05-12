@@ -4,7 +4,7 @@ import psycopg2
 import redis
 
 import repositories.queries.postgres.user as user_queries
-from schemas.user import UserRegisterRequest, UserAuthorizeRequest, UserInfoResponse200
+from schemas.user import UserRegisterRequest, UserAuthorizeRequest, UserInfoResponse200, FullName
 from utils.hash import get_hash_string
 
 class UserRepository:
@@ -94,3 +94,17 @@ class UserRepository:
             user = cursor.fetchone()
         conn.close()
         return user
+
+    def update_user_full_name(self, user_id: str, full_name: FullName):
+        conn = self.connect_postgres()
+        with conn.cursor() as cursor:
+            cursor.execute(user_queries.UPDATE_FULL_NAME, (full_name.first_name, full_name.second_name, full_name.middle_name, user_id))
+        conn.commit()
+        conn.close()
+
+    def update_user_password(self, user_id: str, hash_password: str):
+        conn = self.connect_postgres()
+        with conn.cursor() as cursor:
+            cursor.execute(user_queries.UPDATE_PASSWORD, (hash_password, user_id))
+        conn.commit()
+        conn.close()

@@ -108,7 +108,22 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/UserInfoResponse200'
                 404:
-                    description: Пользователь не найден  
+                    description: Пользователь не найден
+        put:
+            description: Изменить информацию о пользователе
+            parameters:
+              - $ref: '#/components/parameters/Token'
+              - $ref: '#/components/parameters/OrganizationID'
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/UserInfoPutRequest'
+                200:
+                    description: OK
+                404:
+                    description: Пользователь не найден
 
 components:
     parameters:
@@ -292,3 +307,12 @@ components:
                     $ref: '#/components/schemas/FullName'
                 email:
                     $ref: '#/components/schemas/NotEmptyString'
+
+        UserInfoPutRequest:
+            type: object
+            properties:            
+                password:
+                    type: string
+                    minLength: 8
+                full_name:
+                    $ref: '#/components/schemas/FullName'

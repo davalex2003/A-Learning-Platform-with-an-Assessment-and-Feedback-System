@@ -29,3 +29,7 @@ class UserInfoResponse200(BaseModel):
 class UserEmailVerifyRequest(BaseModel):
     token: str = Field(min_length=1)
     code: str = Field(min_length=6, max_length=6)
+
+class UserInfoPutRequest(BaseModel):
+    full_name: Optional[FullName] = Field(None)
+    password: Optional[str] = Field(None, min_length=8)
