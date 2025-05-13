@@ -1,4 +1,4 @@
-openapi: 3.1.0
+openapi: 3.0.0
 
 info:
     title: Learning Platform Courses
@@ -283,7 +283,6 @@ components:
 
         Token:
             in: query
-            type: object
             name: token
             required: true
             schema:
@@ -291,7 +290,6 @@ components:
         
         CourseID:
             in: query
-            type: object
             name: course_id
             required: true
             schema:
@@ -299,7 +297,6 @@ components:
 
         AdditionID:
             in: query
-            type: object
             name: addition_id
             required: true
             schema:
@@ -307,7 +304,6 @@ components:
 
         SearchQuery:
             in: query
-            type: object
             name: search_query
             required: true
             schema:
@@ -316,7 +312,6 @@ components:
         
         AdditionType:
             in: query
-            type: object
             name: addition_type
             required: true
             schema:
@@ -356,7 +351,7 @@ components:
                 description:
                     $ref: '#/components/schemas/NotEmptyString'
                 is_active:
-                    type: bool
+                    type: boolean
 
         Addition:
             type: object
@@ -453,7 +448,7 @@ components:
                 full_name:
                     $ref: '#/components/schemas/FullName'
                 is_evaluated:
-                    type: bool
+                    type: boolean
 
         AssignmentAnswers:
             type: object
