@@ -21,7 +21,7 @@ class Assignment(BaseModel):
     name: str
     started_at: datetime
     ended_at: Optional[datetime] = Field(None)
-    status: Optional[AssignmentStatus]
+    status: Optional[AssignmentStatus] = Field(None)
 
 class AssignmentCourse(BaseModel):
     course_id: str
